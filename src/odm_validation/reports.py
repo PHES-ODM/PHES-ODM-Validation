@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Optional, TypedDict, Union, cast
 
 import odm_validation.part_tables as pt
+import odm_validation.stdext as stdext
 from odm_validation.part_tables import SomeValue
 from odm_validation.input_data import DataKind
 from odm_validation.rules import get_anyof_constraint, RuleId
@@ -12,6 +13,9 @@ from odm_validation.stdext import (
     quote,
     type_name,
 )
+
+
+IntRange = tuple[int, int]
 
 
 class ErrorKind(Enum):
@@ -86,11 +90,25 @@ def join_reports(a: Optional[ValidationReport], b: ValidationReport
     )
 
 
-def _fmt_list(items: list) -> str:
-    if len(items) > 1:
-        return ','.join(map(str, items))
-    else:
-        return str(items[0])
+def _range_is_one(r: IntRange) -> bool:
+    '''returns true if the range has a single element'''
+    return r[0] == r[1]
+
+
+def _ranges_are_one(ranges: list[IntRange]) -> bool:
+    '''returns true if there is just a single element in the list of ranges'''
+    return len(ranges) == 1 and _range_is_one(ranges[0])
+
+
+def _fmt_range_list(ranges: list[IntRange]) -> str:
+
+    def fmt_range(r: IntRange) -> str:
+        if _range_is_one(r):
+            return str(r[0])
+        else:
+            return f'{r[0]}..{r[1]}'
+
+    return ','.join(map(fmt_range, ranges))
 
 
 def get_row_num(row_index: int, offset: int, data_kind: DataKind) -> int:
@@ -138,7 +156,9 @@ def _fmt_msg_value(value: Optional[SomeValue], relaxed: bool = False) -> str:
     return quote(str(x))
 
 
-def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
+def _gen_error_msg(ctx: ErrorCtx,
+                   row_number_ranges: list[tuple[int, int]],
+                   template: Optional[str] = None,
                    error_kind: Optional[ErrorKind] = None) -> str:
     ":param template: overrides ctx.err_template"
     # requirements for error message:
@@ -202,7 +222,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
         constraint=_fmt_msg_value(constraint_val, relaxed=True),
-        row_num=_fmt_list(ctx.row_numbers),
+        row_num=_fmt_range_list(row_number_ranges),
         rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,
         value=_fmt_msg_value(ctx.value),
@@ -236,12 +256,13 @@ def gen_rule_error(ctx: ErrorCtx,
     """
     rule_ids = _get_meta_rule_ids(ctx.column_meta)
     rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
+    row_number_ranges = stdext.gen_ranges(ctx.row_numbers)
     error: dict[str, Union[int, float, str, list, dict]] = {
         (get_error_type_field_name(kind)): ctx.rule_id.name,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
-        'message': _gen_error_msg(ctx, err_template, kind),
+        'message': _gen_error_msg(ctx, row_number_ranges, err_template, kind),
     }
 
     # skip row info for spreadsheet-column errors
@@ -249,10 +270,11 @@ def gen_rule_error(ctx: ErrorCtx,
         return error
 
     # row numbers
-    if len(ctx.row_numbers) > 1:
-        error['rowNumbers'] = ctx.row_numbers
-    else:
-        error['rowNumber'] = ctx.row_numbers[0]
+    if len(row_number_ranges) > 0:
+        if _ranges_are_one(row_number_ranges):
+            error['rowNumber'] = row_number_ranges[0][0]
+        else:
+            error['rowNumbers'] = row_number_ranges
 
     # rows
     rows = _fmt_dataset_values(ctx.rows)

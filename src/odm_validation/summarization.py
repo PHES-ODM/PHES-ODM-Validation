@@ -6,6 +6,7 @@ from itertools import groupby
 # from pprint import pprint
 
 import odm_validation.reports as reports
+import odm_validation.stdext as stdext
 from odm_validation.part_tables import TableId
 from odm_validation.reports import ErrorKind, ValidationReport
 from odm_validation.rules import RuleId
@@ -104,7 +105,7 @@ def _get_error_row_ids(e: dict) -> list[int]:
     if row_id0 is not None:
         return [row_id0]
     else:
-        return e['rowNumbers']
+        return list(stdext.expand_ranges(e['rowNumbers']))
 
 
 def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:

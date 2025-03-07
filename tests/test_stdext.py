@@ -1,7 +1,14 @@
 import unittest
 from copy import deepcopy
 
-from odm_validation.stdext import deep_update, keep, swapDelete, try_parse_int
+from odm_validation.stdext import (
+    deep_update,
+    expand_ranges,
+    gen_ranges,
+    keep,
+    swapDelete,
+    try_parse_int,
+)
 
 import common
 
@@ -114,6 +121,12 @@ class TestStdExt(common.OdmTestCase):
         actual = deepcopy(initial)
         deep_update(actual, addition, merge_dict_lists=True)
         self.assertEqual(actual, expected)
+
+    def test_ranges(self):
+        nums = [1, 2, 3, 4, 5, 8, 9, 100, 101]
+        ranges = gen_ranges(nums)
+        self.assertEqual(ranges, [(1, 5), (8, 9), (100, 101)])
+        self.assertEqual(list(expand_ranges(ranges)), nums)
 
 
 if __name__ == '__main__':

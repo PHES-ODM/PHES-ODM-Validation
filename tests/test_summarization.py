@@ -75,7 +75,7 @@ warnings_in = [
         'warningType': '_coercion',
         'tableName': 'sites',
         'columnName': 'siteID',
-        'rowNumbers': list(range(1, 4)),
+        'rowNumbers': [(1, 3)],
     },
 ]
 

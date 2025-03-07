@@ -5,7 +5,7 @@
             "tableName": "addresses",
             "columnName": "addId",
             "invalidValue": "1",
-            "rowNumbers": [1,2],
+            "rowNumbers": [[1,2]],
             "rows": [
                 {
                     "addId": "1",
@@ -22,7 +22,7 @@
                     "addresses": "pK"
                 }
             ],
-            "message": "duplicate_entries_found rule violated in table addresses, column addId, row(s) 1,2: Duplicate entries found with primary key \"1\""
+            "message": "duplicate_entries_found rule violated in table addresses, column addId, row(s) 1..2: Duplicate entries found with primary key \"1\""
         }
     ],
     "warnings": []

@@ -7,6 +7,7 @@ from cerberus.errors import ValidationError
 
 import odm_validation.part_tables as pt
 import odm_validation.reports as reports
+import odm_validation.stdext as stdext
 from odm_validation.part_tables import ColMeta, Meta, MetaEntry, SomeValue
 from odm_validation.cerberusext import AggregatedError
 from odm_validation.input_data import DataKind
@@ -231,7 +232,8 @@ def _get_table_name(x: dict) -> str:
 
 
 def _get_row_num(x: dict) -> Union[int, list[int]]:
-    return x.get('rowNumber') or x.get('rowNumbers', [])
+    return (x.get('rowNumber') or
+            list(stdext.expand_ranges(x.get('rowNumbers', []))))
 
 
 def _get_column_name(x: dict) -> str:

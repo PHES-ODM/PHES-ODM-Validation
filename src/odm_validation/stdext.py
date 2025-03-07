@@ -3,7 +3,7 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Iterator, Optional, Union
+from typing import Generator, Iterator, Optional, Union
 
 
 def get_len(x: Union[int, float, str, list, dict, datetime]) -> int:
@@ -179,3 +179,37 @@ def keep(x: Union[dict, list], target: str) -> None:
                 swapDelete(x, i)
                 continue
             i += 1
+
+
+def gen_ranges(xs: list[int]) -> list[tuple[int, int]]:
+    '''Converts a list of numbers to a list of pairs, where each pair is the
+    first and last number in a range. A range can either be of a single
+    number, like 1..1, or multiple, like 2..15.
+
+    The input numbers must be in ascending order.
+    '''
+    if len(xs) == 0:
+        return []
+    result: list[tuple[int, int]] = []
+    low = xs[0]
+    high = low
+    for i in range(1, len(xs)):
+        x = xs[i]
+        if x < low:
+            raise ValueError('numbers are not in ascending order')
+        if x > high + 1:
+            result.append((low, high))
+            low = x
+        high = x
+    result.append((low, high))
+    return result
+
+
+def expand_ranges(ranges: list[tuple[int, int]]) -> Generator[int, None, None]:
+    '''expands a list of int-ranges'''
+    # print('expand', ranges)
+    for r in ranges:
+        # print('range', r)
+        for i in range(r[0], r[1]+1):
+            # print('yield', i)
+            yield i
