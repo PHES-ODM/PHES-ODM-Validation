@@ -55,7 +55,7 @@ TABLE_NAMES = _load_table_names()
 
 def _get_odm_versions() -> list[Version]:
     '''returns list of current versions (not including legacy versions)'''
-    walk_default = ('', [], [])
+    walk_default: tuple[str, list[str], list[str]] = ('', [], [])
     dirnames = next(os.walk(_repo_dict_dir), walk_default)[1]
     versions: List[Version] = []
     if len(dirnames) == 0:
