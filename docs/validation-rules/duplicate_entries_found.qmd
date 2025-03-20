@@ -49,7 +49,7 @@ The error report will have the following fields
 * **tableName**: The name of the table with duplicate entries
 * **columnName** The name of the primary key column
 * **invalidValue**: The value of the primary key column
-* **rowNumbers**: The indexes of the duplicate entries
+* **rowNumbers**: The index-ranges of the duplicate entries
 * **rows** The entries in the table that failed this validation rule
 * **validationRuleFields**: The ODM data dictionary rule fields violated by
   this row

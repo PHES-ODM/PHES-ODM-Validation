@@ -7,6 +7,7 @@ from cerberus.errors import ValidationError
 
 import odm_validation.part_tables as pt
 import odm_validation.reports as reports
+import odm_validation.stdext as stdext
 from odm_validation.part_tables import ColMeta, Meta, MetaEntry, SomeValue
 from odm_validation.cerberusext import AggregatedError
 from odm_validation.input_data import DataKind
@@ -230,8 +231,9 @@ def _get_table_name(x: dict) -> str:
     return x['tableName']
 
 
-def _get_row_num(x: dict) -> Union[int, list[int]]:
-    return x.get('rowNumber') or x.get('rowNumbers', [])
+def _get_first_row_num(x: dict) -> int:
+    return (x.get('rowNumber', 0) or
+            next(stdext.expand_ranges(x.get('rowNumbers', [])), 0))
 
 
 def _get_column_name(x: dict) -> str:
@@ -245,13 +247,7 @@ def _get_error_rule_id(x: dict) -> RuleId:
 
 
 def _get_table_rownum_column(x: dict) -> tuple[str, str, int]:
-    row_num = _get_row_num(x)
-    if isinstance(row_num, list):
-        if len(row_num) > 0:
-            row_num = row_num[0]
-        else:
-            row_num = 0
-    assert isinstance(row_num, int)
+    row_num = _get_first_row_num(x)
     return (_get_table_name(x), _get_column_name(x), row_num)
 
 
@@ -269,7 +265,7 @@ def filter_errors(errors: list[dict]) -> list[dict]:
     result = []
     sorted_errors = _sort_errors(errors)
     for tableName, table_errors in groupby(sorted_errors, _get_table_name):
-        for rowNum, row_errors in groupby(table_errors, _get_row_num):
+        for rowNum, row_errors in groupby(table_errors, _get_first_row_num):
             for columnName, col_errors in groupby(row_errors,
                                                   _get_column_name):
                 value_errors = list(col_errors)

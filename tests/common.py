@@ -5,7 +5,7 @@ package modules.
 
 import logging
 import unittest
-from copy import deepcopy
+from copy import copy, deepcopy
 from glob import glob
 from os.path import join, splitext
 from pathlib import Path
@@ -27,6 +27,20 @@ ROOT_DIR = Path(__file__).parent.parent
 ASSET_DIR = join(ROOT_DIR, 'assets')
 
 
+def fixErrorRanges(e: dict) -> dict:
+    '''fixes ranges/tuples loaded from json, which are encoded as arrays, and
+    therefore would be interpreted as lists without this transform.'''
+    e = copy(e)
+    arrRanges = e.get('rowNumbers')
+    if not arrRanges:
+        return e
+    tupRanges = []
+    for r in arrRanges:
+        tupRanges.append(tuple(r))
+    e['rowNumbers'] = tupRanges
+    return e
+
+
 class OdmTestCase(unittest.TestCase):
     def run(self, result=None):
         # This makes sure that tests fails when errors are logged.
@@ -39,7 +53,8 @@ class OdmTestCase(unittest.TestCase):
         self.assertTrue([single_entry], cm.output)
 
     def assertReportEqual(self, expected, report):
-        self.assertEqual(expected['errors'], report.errors)
+        expErrors = list(map(fixErrorRanges, expected['errors']))
+        self.assertEqual(expErrors, report.errors)
         self.assertEqual(expected['warnings'], report.warnings)
 
 
