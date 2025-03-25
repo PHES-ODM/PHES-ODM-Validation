@@ -6,11 +6,11 @@
             "coercionRules": ["less_than_min_value"],
             "tableName": "sites",
             "columnName": "lastEdited",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": 1,
                 "lastEdited": "2023-01-30"
-            },
+            }],
             "invalidValue": "2023-01-30",
             "validationRuleFields": [
                 {
@@ -26,11 +26,11 @@
             "coercionRules": ["less_than_min_value"],
             "tableName": "sites",
             "columnName": "lastEdited",
-            "rowNumber": 2,
-            "row": {
+            "rowNumbers": [2],
+            "rows": [{
                 "siteID": 2,
                 "lastEdited": "2023-01-30T00:00:00"
-            },
+            }],
             "invalidValue": "2023-01-30T00:00:00",
             "validationRuleFields": [
                 {

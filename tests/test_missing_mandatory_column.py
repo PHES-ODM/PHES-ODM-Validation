@@ -5,14 +5,14 @@ from parameterized import parameterized
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import import_dataset, import_json_file
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     validate_data,
 )
 
 import common
-from common import asset, gen_v2_testschemas
+from common import asset, gen_v2_testschemas, import_report
 
 
 common.ASSET_SUBDIR = 'validation-rules/missing-mandatory-column'
@@ -21,7 +21,7 @@ parts_v2 = import_dataset(asset('parts.csv'))
 schema_v1 = import_schema(asset('schema-v1.yml'))
 v2_schema = import_schema(asset('schema-v2.yml'))
 v2_schemas = gen_v2_testschemas(v2_schema)
-error_report = import_json_file(asset('error-report.json'))
+error_report = import_report(asset('error-report.json'))
 
 missing_mandatory_column_pass_v2 = {
     'addresses': import_dataset(asset('valid-dataset.csv')),

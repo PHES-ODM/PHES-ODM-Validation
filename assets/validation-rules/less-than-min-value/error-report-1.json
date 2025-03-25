@@ -4,12 +4,12 @@
             "errorType": "less_than_min_value",
             "tableName": "sites",
             "columnName": "geoLat",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": 1,
                 "geoLat": -91,
                 "geoLong": -90.2
-            },
+            }],
             "invalidValue": -91,
             "validationRuleFields": [
                 {
@@ -24,12 +24,12 @@
             "errorType": "less_than_min_value",
             "tableName": "sites",
             "columnName": "geoLong",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": 1,
                 "geoLat": -91,
                 "geoLong": -90.2
-            },
+            }],
 	    "invalidValue": -90.2,
             "validationRuleFields": [
                 {

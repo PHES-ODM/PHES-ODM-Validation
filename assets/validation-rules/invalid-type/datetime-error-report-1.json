@@ -4,11 +4,11 @@
             "errorType": "invalid_type",
             "tableName": "measures",
             "columnName": "reportDate",
-            "row": {
+            "rows": [{
                 "measureID": "1",
                 "reportDate": "a"
-            },
-            "rowNumber": 1,
+            }],
+            "rowNumbers": [1],
             "invalidValue": "a",
             "validationRuleFields": [
                 {
@@ -23,11 +23,11 @@
             "errorType": "invalid_type",
             "tableName": "measures",
             "columnName": "reportDate",
-            "row": {
+            "rows": [{
                 "measureID": "2",
                 "reportDate": "2022"
-            },
-            "rowNumber": 2,
+            }],
+            "rowNumbers": [2],
             "invalidValue": "2022",
             "validationRuleFields": [
                 {

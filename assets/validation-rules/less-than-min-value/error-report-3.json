@@ -5,12 +5,12 @@
             "coercionRules": ["less_than_min_value"],
             "tableName": "sites",
             "columnName": "geoLat",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": "a",
                 "geoLong": "b"
-            },
+            }],
             "invalidValue": "a",
             "validationRuleFields": [
                 {
@@ -26,12 +26,12 @@
             "coercionRules": ["less_than_min_value"],
             "tableName": "sites",
             "columnName": "geoLong",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": "a",
                 "geoLong": "b"
-            },
+            }],
             "invalidValue": "b",
             "validationRuleFields": [
                 {

@@ -5,17 +5,14 @@ from parameterized import parameterized, parameterized_class
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import (
-    import_dataset,
-    import_json_file,
-)
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     validate_data,
 )
 
 import common
-from common import asset, gen_v2_testschemas
+from common import asset, gen_v2_testschemas, import_report
 
 
 class Assets():
@@ -36,7 +33,7 @@ class Assets():
             'contacts': import_dataset(asset('invalid-dataset.csv'))
         }
 
-        self.error_report = import_json_file(asset('error-report.json'))
+        self.error_report = import_report(asset('error-report.json'))
 
 
 @parameterized_class([

@@ -4,10 +4,10 @@
             "errorType": "invalid_category",
             "tableName": "samples",
             "columnName": "coll",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "coll": "flow"
-            },
+            }],
             "invalidValue": "flow",
             "validationRuleFields": [
                 {

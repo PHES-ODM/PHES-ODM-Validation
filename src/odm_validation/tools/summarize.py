@@ -10,7 +10,7 @@ from typing import IO, Optional
 
 import typer
 
-from odm_validation.reports import ErrorKind, ValidationReport
+from odm_validation.reports import ErrorKind, ValidationReport, fix_json_report
 from odm_validation.summarization import (
     SummarizedReport,
     SummaryEntry,
@@ -81,6 +81,8 @@ def read_report_from_file(file: IO) -> Optional[ValidationReport]:
     report_obj: Optional[dict] = None
     if fmt == ReportFormat.JSON:
         report_obj = json.loads(raw_data)
+        if report_obj:
+            fix_json_report(report_obj)
     elif fmt == ReportFormat.YAML:
         logging.warn('you should use json-reports instead of yaml when ' +
                      'summarizing, since yaml parsing is extremely slow')

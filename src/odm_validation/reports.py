@@ -1,4 +1,5 @@
 import datetime
+from copy import copy
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional, TypedDict, Union, cast
@@ -9,13 +10,11 @@ from odm_validation.part_tables import SomeValue
 from odm_validation.input_data import DataKind
 from odm_validation.rules import get_anyof_constraint, RuleId
 from odm_validation.stdext import (
+    IntRange,
     get_len,
     quote,
     type_name,
 )
-
-
-IntRange = tuple[int, int]
 
 
 class ErrorKind(Enum):
@@ -72,6 +71,32 @@ class ValidationReport:
         return len(self.errors) == 0
 
 
+def _fix_error_ranges(e: dict) -> None:
+    '''fixes error ranges in-place'''
+    arrRanges = e.get('rowNumbers')
+    if not arrRanges:
+        return
+    tupRanges: list[IntRange] = []
+    for r in arrRanges:
+        if isinstance(r, int):
+            tupRanges.append(r)
+        else:
+            assert isinstance(r, list)
+            tupRanges.append(tuple(r))
+    e['rowNumbers'] = tupRanges
+
+
+def fix_json_report(report: dict) -> None:
+    '''fixes ranges (of type IntRange) loaded from json, which are encoded as
+    arrays, and therefore would be interpreted as lists without this (in-place)
+    transform.
+    '''
+    for e in report['errors']:
+        _fix_error_ranges(e)
+    for e in report['warnings']:
+        _fix_error_ranges(e)
+
+
 def join_reports(a: Optional[ValidationReport], b: ValidationReport
                  ) -> ValidationReport:
     """Joins two reports together into a new report."""
@@ -92,20 +117,17 @@ def join_reports(a: Optional[ValidationReport], b: ValidationReport
 
 def _range_is_one(r: IntRange) -> bool:
     '''returns true if the range has a single element'''
-    return r[0] == r[1]
-
-
-def _ranges_are_one(ranges: list[IntRange]) -> bool:
-    '''returns true if there is just a single element in the list of ranges'''
-    return len(ranges) == 1 and _range_is_one(ranges[0])
+    return isinstance(r, int) or r[0] == r[1]
 
 
 def _fmt_range_list(ranges: list[IntRange]) -> str:
 
     def fmt_range(r: IntRange) -> str:
         if _range_is_one(r):
-            return str(r[0])
+            x = r if isinstance(r, int) else r[0]
+            return str(x)
         else:
+            assert isinstance(r, tuple)
             return f'{r[0]}..{r[1]}'
 
     return ','.join(map(fmt_range, ranges))
@@ -157,7 +179,7 @@ def _fmt_msg_value(value: Optional[SomeValue], relaxed: bool = False) -> str:
 
 
 def _gen_error_msg(ctx: ErrorCtx,
-                   row_number_ranges: list[tuple[int, int]],
+                   row_number_ranges: list[IntRange],
                    template: Optional[str] = None,
                    error_kind: Optional[ErrorKind] = None) -> str:
     ":param template: overrides ctx.err_template"
@@ -270,18 +292,10 @@ def gen_rule_error(ctx: ErrorCtx,
         return error
 
     # row numbers
-    if len(row_number_ranges) > 0:
-        if _ranges_are_one(row_number_ranges):
-            error['rowNumber'] = row_number_ranges[0][0]
-        else:
-            error['rowNumbers'] = row_number_ranges
+    error['rowNumbers'] = row_number_ranges
 
     # rows
-    rows = _fmt_dataset_values(ctx.rows)
-    if len(ctx.rows) > 1:
-        error['rows'] = rows
-    else:
-        error['row'] = rows[0]
+    error['rows'] = _fmt_dataset_values(ctx.rows)
 
     # value
     if ctx.value is not None:

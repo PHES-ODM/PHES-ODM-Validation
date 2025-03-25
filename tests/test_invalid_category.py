@@ -5,10 +5,7 @@ from parameterized import parameterized
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import (
-    import_dataset,
-    import_json_file,
-)
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     validate_data,
@@ -16,7 +13,7 @@ from odm_validation.validation import (
 # from odm_validation.versions import Version
 
 import common
-from common import asset
+from common import asset, import_report
 
 
 common.ASSET_SUBDIR = 'validation-rules/invalid-category'
@@ -27,7 +24,7 @@ sets = import_dataset(asset('sets.csv'))
 schema_v1 = import_schema(asset('schema-v1.yml'))
 schema_v2 = import_schema(asset('schema-v2.yml'))
 v2_schemas = common.gen_v2_testschemas(schema_v2)
-error_report = import_json_file(asset('error-report.json'))
+error_report = import_report(asset('error-report.json'))
 
 invalid_category_pass_1_v2 = {
     'samples': import_dataset(asset('valid-dataset-1.csv')),

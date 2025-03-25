@@ -1,9 +1,13 @@
+import sys
 import dateutil.parser as dateutil_parser
 import json
 import operator
 from datetime import datetime
 from functools import reduce
 from typing import Generator, Iterator, Optional, Union
+
+
+IntRange = Union[int, tuple[int, int]]
 
 
 def get_len(x: Union[int, float, str, list, dict, datetime]) -> int:
@@ -181,7 +185,14 @@ def keep(x: Union[dict, list], target: str) -> None:
             i += 1
 
 
-def gen_ranges(xs: list[int]) -> list[tuple[int, int]]:
+def _append_range(ranges: list[IntRange], low: int, high: int) -> None:
+    if low == high:
+        ranges.append(low)
+    else:
+        ranges.append((low, high))
+
+
+def gen_ranges(xs: list[int]) -> list[IntRange]:
     '''Converts a list of numbers to a list of pairs, where each pair is the
     first and last number in a range. A range can either be of a single
     number, like 1..1, or multiple, like 2..15.
@@ -190,7 +201,7 @@ def gen_ranges(xs: list[int]) -> list[tuple[int, int]]:
     '''
     if len(xs) == 0:
         return []
-    result: list[tuple[int, int]] = []
+    result: list[IntRange] = []
     low = xs[0]
     high = low
     for i in range(1, len(xs)):
@@ -198,18 +209,21 @@ def gen_ranges(xs: list[int]) -> list[tuple[int, int]]:
         if x < low:
             raise ValueError('numbers are not in ascending order')
         if x > high + 1:
-            result.append((low, high))
+            _append_range(result, low, high)
             low = x
         high = x
-    result.append((low, high))
+    _append_range(result, low, high)
     return result
 
 
-def expand_ranges(ranges: list[tuple[int, int]]) -> Generator[int, None, None]:
-    '''expands a list of int-ranges'''
-    # print('expand', ranges)
+def expand_ranges(ranges: list[IntRange]
+                  ) -> Generator[int, None, None]:
+    '''Expands a list of int-ranges. Ranges from and to the same int can be
+    written as a single int instead of a tuple.'''
     for r in ranges:
-        # print('range', r)
-        for i in range(r[0], r[1]+1):
-            # print('yield', i)
-            yield i
+        if isinstance(r, int):
+            yield r
+        else:
+            assert isinstance(r, tuple), str(r)
+            for i in range(r[0], r[1]+1):
+                yield i

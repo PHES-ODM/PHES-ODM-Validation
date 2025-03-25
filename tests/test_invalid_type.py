@@ -5,10 +5,7 @@ from parameterized import parameterized, parameterized_class
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import (
-    import_dataset,
-    import_json_file,
-)
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     _validate_data_ext,
@@ -21,6 +18,7 @@ from common import (
     gen_testschema,
     gen_v2_testschemas,
     import_dataset2,
+    import_report,
     param_range,
 )
 
@@ -57,11 +55,11 @@ class Assets():
 
         # error reports
         self.error_report = [
-            import_json_file(asset(f'{kind}-error-report-1.json')),
+            import_report(asset(f'{kind}-error-report-1.json')),
         ]
         if kind in {'bool', 'integer'}:
             self.error_report.append(
-                import_json_file(asset(f'{kind}-error-report-2.json')))
+                import_report(asset(f'{kind}-error-report-2.json')))
 
 
 @parameterized_class([

@@ -4,11 +4,11 @@
             "errorType": "invalid_email",
             "tableName": "contacts",
             "columnName": "email",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "contactID": "1",
                 "email": "john.doe"
-            },
+            }],
             "invalidValue": "john.doe",
             "validationRuleFields": [],
             "message": "Invalid email john.doe found in row 1 for column email in table contacts"

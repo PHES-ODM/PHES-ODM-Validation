@@ -4,11 +4,11 @@
             "errorType": "invalid_type",
             "tableName": "measures",
             "columnName": "reportable",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "measureID": "1",
                 "reportable": "Yes"
-            },
+            }],
             "invalidValue": "Yes",
             "validationRuleFields": [
                 {

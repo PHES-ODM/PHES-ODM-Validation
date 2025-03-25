@@ -232,8 +232,7 @@ def _get_table_name(x: dict) -> str:
 
 
 def _get_first_row_num(x: dict) -> int:
-    return (x.get('rowNumber', 0) or
-            next(stdext.expand_ranges(x.get('rowNumbers', [])), 0))
+    return next(stdext.expand_ranges(x.get('rowNumbers', [])), 0)
 
 
 def _get_column_name(x: dict) -> str:

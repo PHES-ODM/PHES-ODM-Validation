@@ -5,7 +5,7 @@ package modules.
 
 import logging
 import unittest
-from copy import copy, deepcopy
+from copy import deepcopy
 from glob import glob
 from os.path import join, splitext
 from pathlib import Path
@@ -13,6 +13,7 @@ from typing import Union
 
 import odm_validation.odm as odm
 import odm_validation.utils as utils
+from odm_validation.reports import fix_json_report
 
 
 # TODO: make this global lower-case, since it's not constant
@@ -27,18 +28,11 @@ ROOT_DIR = Path(__file__).parent.parent
 ASSET_DIR = join(ROOT_DIR, 'assets')
 
 
-def fixErrorRanges(e: dict) -> dict:
-    '''fixes ranges/tuples loaded from json, which are encoded as arrays, and
-    therefore would be interpreted as lists without this transform.'''
-    e = copy(e)
-    arrRanges = e.get('rowNumbers')
-    if not arrRanges:
-        return e
-    tupRanges = []
-    for r in arrRanges:
-        tupRanges.append(tuple(r))
-    e['rowNumbers'] = tupRanges
-    return e
+def import_report(path) -> dict:
+    '''imports an error report from `path'''
+    report = utils.import_json_file(path)
+    fix_json_report(report)
+    return report
 
 
 class OdmTestCase(unittest.TestCase):
@@ -53,8 +47,7 @@ class OdmTestCase(unittest.TestCase):
         self.assertTrue([single_entry], cm.output)
 
     def assertReportEqual(self, expected, report):
-        expErrors = list(map(fixErrorRanges, expected['errors']))
-        self.assertEqual(expErrors, report.errors)
+        self.assertEqual(expected['errors'], report.errors)
         self.assertEqual(expected['warnings'], report.warnings)
 
 

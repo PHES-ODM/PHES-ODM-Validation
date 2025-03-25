@@ -85,8 +85,8 @@ expected_coercion_warnings = [
         'message': ('_coercion rule triggered '
                     'in table mytable, column amount, row(s) 1: '
                     'Value \"123\" is a string and was coerced into a number'),
-        'row': {'amount': '123', 'unknown': 'asd'},
-        'rowNumber': 1,
+        'rows': [{'amount': '123', 'unknown': 'asd'}],
+        'rowNumbers': [1],
         'tableName': 'mytable',
         'validationRuleFields': [
             {'a': 'b'},
@@ -101,8 +101,8 @@ expected_coercion_warnings = [
         'message': ('_coercion rule triggered '
                     'in table mytable, column quantity, row(s) 2: '
                     'Value \"567\" is a string and was coerced into a number'),
-        'row': {'quantity': '567'},
-        'rowNumber': 2,
+        'rows': [{'quantity': '567'}],
+        'rowNumbers': [2],
         'tableName': 'mytable',
         'validationRuleFields': [],
         'warningType': '_coercion'

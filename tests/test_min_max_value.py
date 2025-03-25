@@ -6,17 +6,20 @@ import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
 from odm_validation.stdext import deep_update
-from odm_validation.utils import (
-    import_dataset,
-    import_json_file,
-)
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     _validate_data_ext,
 )
 
 import common
-from common import asset, gen_v2_testschemas, import_dataset2, param_range
+from common import (
+    asset,
+    gen_v2_testschemas,
+    import_dataset2,
+    import_report,
+    param_range,
+)
 
 
 class Assets():
@@ -44,9 +47,9 @@ class Assets():
         empty_report = {'errors': [], 'warnings': []}
         self.error_report_pass = [
             empty_report,
-            import_json_file(asset('error-report-pass-2.json')),
+            import_report(asset('error-report-pass-2.json')),
             empty_report,
-            import_json_file(asset('error-report-pass-4.json')),
+            import_report(asset('error-report-pass-4.json')),
         ]
 
         self.data_fail = []
@@ -55,7 +58,7 @@ class Assets():
             self.data_fail.append(
                 {'sites': import_dataset2(asset(f'invalid-dataset-{i}.*'))})
             self.error_report_fail.append(
-                import_json_file(asset(f'error-report-{i}.json')))
+                import_report(asset(f'error-report-{i}.json')))
 
 
 @parameterized_class([
