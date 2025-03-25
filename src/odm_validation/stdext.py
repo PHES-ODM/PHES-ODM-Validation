@@ -1,4 +1,3 @@
-import sys
 import dateutil.parser as dateutil_parser
 import json
 import operator
