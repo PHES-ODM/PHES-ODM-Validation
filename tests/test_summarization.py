@@ -27,19 +27,19 @@ errors_in = [
         'errorType': 'invalid_type',
         'tableName': 'addresses',
         'columnName': 'addID',
-        'rowNumber': 1,
+        'rowNumbers': [1],
     },
     {
         'errorType': 'invalid_type',
         'tableName': 'addresses',
         'columnName': 'addID',
-        'rowNumber': 2,
+        'rowNumbers': [2],
     },
     {
         'errorType': 'invalid_type',
         'tableName': 'sites',
         'columnName': 'siteID',
-        'rowNumber': 1,
+        'rowNumbers': [1],
     },
 ]
 
@@ -69,7 +69,7 @@ warnings_in = [
         'warningType': '_coercion',
         'tableName': 'addresses',
         'columnName': 'addID',
-        'rowNumber': 1,
+        'rowNumbers': [1],
     },
     {
         'warningType': '_coercion',

@@ -101,11 +101,7 @@ def _get_error_table_rule(e: dict) -> tuple[TableId, RuleId]:
 
 
 def _get_error_row_ids(e: dict) -> list[int]:
-    row_id0 = e.get('rowNumber')
-    if row_id0 is not None:
-        return [row_id0]
-    else:
-        return list(stdext.expand_ranges(e['rowNumbers']))
+    return list(stdext.expand_ranges(e.get('rowNumbers', [])))
 
 
 def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:
@@ -127,14 +123,10 @@ def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:
     total_counts: ErrorCounts = defaultdict(Count)
     key_counts: dict[SummaryKey, TableCounts] = defaultdict(dict)
     for e in errors:
+        # XXX: when no rows, it's a column error, and count=1
         table_id, rule_id = _get_error_table_rule(e)
-        is_row_err = 'rowNumber' in e or 'rowNumbers' in e
-        if is_row_err:
-            row_ids = _get_error_row_ids(e)
-            count = len(row_ids)
-        else:
-            row_ids = []
-            count = 1
+        row_ids = _get_error_row_ids(e)
+        count = max(1, len(row_ids))
         total_counts[rule_id] += count
         for key in keys:
             if key == SummaryKey.ROW:

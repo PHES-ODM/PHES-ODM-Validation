@@ -4,11 +4,11 @@
             "errorType": "greater_than_max_value",
             "tableName": "sites",
             "columnName": "lastEdited",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": 1,
                 "lastEdited": "2024-12-30 00:00:00"
-            },
+            }],
             "invalidValue": "2024-12-30 00:00:00",
             "validationRuleFields": [
                 {
@@ -26,11 +26,11 @@
             "coercionRules": ["greater_than_max_value"],
             "tableName": "sites",
             "columnName": "lastEdited",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "lastEdited": "2024-12-30",
                 "siteID": 1
-            },
+            }],
             "invalidValue": "2024-12-30",
             "validationRuleFields": [
                 {

@@ -5,11 +5,11 @@
             "tableName": "sites",
             "columnName": "geoLat",
             "invalidValue": "  ",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": "  "
-            },
+            }],
             "validationRuleFields": [
                 {
                     "partID": "geoLat",

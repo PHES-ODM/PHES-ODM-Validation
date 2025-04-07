@@ -4,11 +4,11 @@
             "warningType": "missing_values_found",
             "tableName": "sites",
             "columnName": "geoLat",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": ""
-            },
+            }],
             "invalidValue": "",
             "validationRuleFields": [
                 {

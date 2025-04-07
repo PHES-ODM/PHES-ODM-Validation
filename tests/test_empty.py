@@ -3,11 +3,11 @@ import unittest
 from parameterized import parameterized
 
 from odm_validation.schemas import import_schema
-from odm_validation.utils import import_dataset, import_json_file
+from odm_validation.utils import import_dataset
 from odm_validation.validation import _validate_data_ext
 
 import common
-from common import asset
+from common import asset, import_report
 
 
 class TestEmpty(common.OdmTestCase):
@@ -24,7 +24,7 @@ class TestEmpty(common.OdmTestCase):
         schema = import_schema(asset(f'schema-v2-{rulename}.yml'))
         data = {'sites': import_dataset(asset(f'dataset-{rulename}.csv'))}
         report = _validate_data_ext(schema, data)
-        expected = import_json_file(asset(f'error-report-{rulename}.json'))
+        expected = import_report(asset(f'error-report-{rulename}.json'))
         self.assertReportEqual(expected, report)
 
 

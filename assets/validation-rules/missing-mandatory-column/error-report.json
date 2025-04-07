@@ -4,10 +4,10 @@
             "errorType": "missing_mandatory_column",
             "tableName": "addresses",
             "columnName": "addID",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "addL2": "123 Doe Street"
-            },
+            }],
             "validationRuleFields": [
                 {
                     "addresses": "pK",

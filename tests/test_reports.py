@@ -43,8 +43,8 @@ class TestReports(common.OdmTestCase):
         data = {'addresses': [{'addID': 0}, {'addID': 1}, {'addID': 2}]}
         py_report = validate_data(schema, data, data_kind=DataKind.python)
         ss_report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
-        self.assertEqual(py_report.errors[0]['rowNumber'], 3)
-        self.assertEqual(ss_report.errors[0]['rowNumber'], 4)
+        self.assertEqual(py_report.errors[0]['rowNumbers'], [3])
+        self.assertEqual(ss_report.errors[0]['rowNumbers'], [4])
 
     def test_column_rules_reported_once_for_spreadsheet(self):
         schema = deepcopy(base_schema)
@@ -118,7 +118,7 @@ class TestReports(common.OdmTestCase):
         data = {'addresses': [{'asd': '123'}]}
         report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
         msg = report.errors[0]['message']
-        self.assertFalse('row' in msg)
+        self.assertFalse('rows' in msg)
         self.assertTrue('column addID:' in msg)
 
 

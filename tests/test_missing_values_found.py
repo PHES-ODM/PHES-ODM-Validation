@@ -5,14 +5,14 @@ from parameterized import parameterized
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import import_dataset, import_json_file
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     _generate_validation_schema_ext,
     _validate_data_ext,
 )
 
 import common
-from common import asset, gen_v2_testschemas, param_range
+from common import asset, gen_v2_testschemas, import_report, param_range
 
 
 class Assets():
@@ -34,7 +34,7 @@ class Assets():
         for i in range(1, 4):
             self.data_fail[i] = \
                 {table: import_dataset(asset(f'invalid-dataset-{i}.csv'))}
-            self.reports[i] = import_json_file(asset(f'error-report-{i}.json'))
+            self.reports[i] = import_report(asset(f'error-report-{i}.json'))
 
 
 class TestMissingValuesFound(common.OdmTestCase):

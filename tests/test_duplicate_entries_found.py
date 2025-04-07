@@ -5,17 +5,14 @@ from parameterized import parameterized
 import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
-from odm_validation.utils import (
-    import_dataset,
-    import_json_file,
-)
+from odm_validation.utils import import_dataset
 from odm_validation.validation import (
     generate_validation_schema,
     _validate_data_ext,
 )
 
 import common
-from common import asset, gen_v2_testschemas, param_range
+from common import asset, gen_v2_testschemas, import_report, param_range
 
 
 class Assets():
@@ -39,8 +36,8 @@ class Assets():
 
         # error reports
         self.error_report = {
-            1: import_json_file(asset('error-report-1.json')),
-            2: import_json_file(asset('error-report-2.json'))
+            1: import_report(asset('error-report-1.json')),
+            2: import_report(asset('error-report-2.json'))
         }
 
 

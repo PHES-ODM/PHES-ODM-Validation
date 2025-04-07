@@ -4,11 +4,11 @@
             "errorType": "greater_than_max_length",
             "tableName": "contacts",
             "columnName": "phone",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "contactID": "1",
                 "phone": "123-456-111"
-            },
+            }],
             "invalidValue": "123-456-111",
             "validationRuleFields": [
                 {

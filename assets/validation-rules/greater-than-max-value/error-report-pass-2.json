@@ -6,12 +6,12 @@
 	    "coercionRules": ["greater_than_max_value"],
             "tableName": "sites",
             "columnName": "geoLat",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": "89",
                 "geoLong": "90.1"
-            },
+            }],
             "invalidValue": "89",
             "validationRuleFields": [
                 {
@@ -27,12 +27,12 @@
 	    "coercionRules": ["greater_than_max_value"],
             "tableName": "sites",
             "columnName": "geoLong",
-            "rowNumber": 1,
-            "row": {
+            "rowNumbers": [1],
+            "rows": [{
                 "siteID": "1",
                 "geoLat": "89",
                 "geoLong": "90.1"
-            },
+            }],
             "invalidValue": "90.1",
             "validationRuleFields": [
                 {
