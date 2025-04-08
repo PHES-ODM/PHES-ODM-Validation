@@ -128,6 +128,12 @@ class TestStdExt(common.OdmTestCase):
         self.assertEqual(ranges, [(1, 5), (8, 9), (100, 101)])
         self.assertEqual(list(expand_ranges(ranges)), nums)
 
+    def test_ranges_with_singles(self):
+        nums = [1, 3, 5, 6, 7, 8, 10]
+        ranges = gen_ranges(nums)
+        self.assertEqual(ranges, [1, 3, (5, 8), 10])
+        self.assertEqual(list(expand_ranges(ranges)), nums)
+
 
 if __name__ == '__main__':
     unittest.main()
