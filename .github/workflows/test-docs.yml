@@ -14,12 +14,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@7f4fc3e # v4
       with:
         python-version: '3.9'
-    - uses: nikeee/setup-pandoc@v1
-    - uses: quarto-dev/quarto-actions/setup@v2
-    - uses: actions/checkout@v3
+    - uses: nikeee/setup-pandoc@96d7406 # v1
+    - uses: quarto-dev/quarto-actions/setup@9e48da2 # v2
+    - uses: actions/checkout@f43a0e5 # v3
       with:
         fetch-depth: 0
     - name: Install python dependencies
@@ -30,7 +30,7 @@ jobs:
     - name: Render Quarto docs
       run: python src/odm_validation/tools/render_quarto_docs.py
     - name: Build and Commit
-      uses: sphinx-notes/pages@2.1 # requires checkout with `fetch-depth: 0`
+      uses: sphinx-notes/pages@740f210 # v2.1 # requires checkout with `fetch-depth: 0`
       with:
         documentation_path: docs
         target_branch: gh-pages
