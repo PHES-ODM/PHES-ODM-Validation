@@ -8,13 +8,13 @@ jobs:
     name: Lint
     steps:
       - name: Check out source repository
-        uses: actions/checkout@f43a0e5 # v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       - name: Set up Python environment
-        uses: actions/setup-python@7f4fc3e # v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4
         with:
           python-version: '3.9'
       - name: flake8 Lint
-        uses: py-actions/flake8@84ec672 # v2
+        uses: py-actions/flake8@84ec6726560b6d5bd68f2a5bed83d62b52bb50ba # v2
         with:
           path: "src tests"
           max-line-length: "80"
