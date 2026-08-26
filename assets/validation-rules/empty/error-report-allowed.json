@@ -29,16 +29,6 @@
             "tableName": "sites",
             "validationRuleFields": [],
             "warningType": "missing_values_found"
-        },
-        {
-            "columnName": "allowedField",
-            "invalidValue": "NA",
-            "message": "missing_values_found rule triggered in table sites, column allowedField, row(s) 4: Missing value \"NA\"",
-            "row": {"allowedField": "NA", "siteID": "4"},
-            "rowNumber": 4,
-            "tableName": "sites",
-            "validationRuleFields": [],
-            "warningType": "missing_values_found"
         }
     ],
     "errors": [

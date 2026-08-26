@@ -7,22 +7,12 @@ schema:
       schema:
         geoLat:
           emptyTrimmed: false
-          forbidden:
-          - NA
-          - NA_missing
-          - 'null'
           meta:
           - ruleID: missing_values_found
             meta:
             - partID: geoLat
               sites: header
               sitesRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: NA_missing
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
       meta:
       - partID: sites
         partType: tables

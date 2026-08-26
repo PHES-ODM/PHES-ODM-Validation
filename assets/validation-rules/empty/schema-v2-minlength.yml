@@ -10,5 +10,3 @@ schema:
           - minlength: 5
             empty: true
           emptyTrimmed: false
-          forbidden:
-          - NA

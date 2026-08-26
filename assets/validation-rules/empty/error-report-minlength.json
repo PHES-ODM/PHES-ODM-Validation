@@ -28,16 +28,6 @@
             "rowNumber": 3,
             "row": {"siteID": "3", "minlengthField": "   "},
             "invalidValue": "   "
-        },
-        {
-            "warningType": "missing_values_found",
-            "tableName": "sites",
-            "columnName": "minlengthField",
-            "validationRuleFields": [],
-            "message": "missing_values_found rule triggered in table sites, column minlengthField, row(s) 4: Missing value \"NA\"",
-            "rowNumber": 4,
-            "row": {"siteID": "4", "minlengthField": "NA"},
-            "invalidValue": "NA"
         }
     ],
     "errors": [

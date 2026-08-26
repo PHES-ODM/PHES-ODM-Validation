@@ -1,4 +1,4 @@
-setID,setType,partID,partLabel,status,firstReleased,lastUpdated,changes,notes,
+setID,setType,partID,label,status,firstReleased,lastUpdated,changes,notes,
 absHumidUnitSet,unitSets,gm3,Gram per cubic metre,active,2.0.0,2.0.0,,,
 airCompartmentSet,compartmentSets,air,Air compartment,active,2.0.0,2.0.0,,,
 airSurfaceCompartmentSet,compartmentSets,air,Air compartment,active,2.0.0,2.0.0,,,

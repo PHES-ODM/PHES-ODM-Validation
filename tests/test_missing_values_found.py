@@ -31,7 +31,7 @@ class Assets():
         self.data_pass = {table: import_dataset(asset('valid-dataset.csv'))}
         self.data_fail = {}
         self.reports = {}
-        for i in range(1, 4):
+        for i in range(1, 3):
             self.data_fail[i] = \
                 {table: import_dataset(asset(f'invalid-dataset-{i}.csv'))}
             self.reports[i] = import_json_file(asset(f'error-report-{i}.json'))
@@ -60,7 +60,7 @@ class TestMissingValuesFound(common.OdmTestCase):
                                     self.assets.data_pass)
         self.assertTrue(report.valid())
 
-    @parameterized.expand(param_range(1, 4))
+    @parameterized.expand(param_range(1, 3))
     def test_failing_datasets(self, i):
         report = _validate_data_ext(schema=self.assets.schemas['2.0.0'],
                                     data=self.assets.data_fail[i])

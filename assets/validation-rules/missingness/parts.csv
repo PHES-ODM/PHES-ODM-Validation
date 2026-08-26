@@ -1,0 +1,10 @@
+partID,partType,status,sites,sitesRequired,samples,samplesRequired,dataType,maxLength,missingnessSet,version1Location,version1Table,version1Variable,firstReleased,lastUpdated
+NA,missingness,active,NA,NA,NA,NA,varchar,NA,NA,NA,NA,NA,1.0.0,2.0.0
+nan,missingness,active,NA,NA,NA,NA,varchar,NA,NA,NA,NA,NA,1.0.0,2.0.0
+nr,missingness,active,NA,NA,NA,NA,varchar,NA,NA,NA,NA,NA,1.0.0,2.0.0
+sites,tables,active,NA,NA,NA,NA,NA,NA,NA,tables,Site,NA,1.0.0,2.0.0
+samples,tables,active,NA,NA,NA,NA,NA,NA,NA,tables,Sample,NA,1.0.0,2.0.0
+siteID,attributes,active,pK,mandatory,fK,optional,varchar,NA,genMissingnessSet,variables,Site;Sample,siteID,1.0.0,2.0.0
+geoLat,attributes,active,header,mandatory,NA,NA,float,NA,nrNAMissingnessSet,variables,Site,latitude,1.0.0,2.0.0
+geoLong,attributes,active,header,optional,NA,NA,float,NA,NA,variables,Site,longitude,1.0.0,2.0.0
+country,attributes,active,header,optional,NA,NA,varchar,2,nrMissingnessSet,variables,Site,country,1.0.0,2.0.0

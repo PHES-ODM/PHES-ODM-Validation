@@ -12,5 +12,3 @@ schema:
             - b
             empty: true
           emptyTrimmed: false
-          forbidden:
-          - NA

@@ -1,0 +1,105 @@
+schemaVersion: '1.0.0'
+schema:
+  Site:
+    type: list
+    schema:
+      type: dict
+      schema:
+        siteID:
+          missingness:
+            allowed: []
+            forbidden:
+            - NA
+            - nan
+            - nr
+          meta:
+          - ruleID: missingness
+            meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site;Sample
+              version1Variable: siteID
+              missingnessSet: genMissingnessSet
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+        latitude:
+          missingness:
+            allowed:
+            - NA
+            - nr
+            forbidden: []
+          meta:
+          - ruleID: missingness
+            meta:
+            - partID: geoLat
+              sites: header
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: latitude
+              missingnessSet: nrNAMissingnessSet
+            - partID: NA
+              setID: nrNAMissingnessSet
+            - partID: nr
+              setID: nrNAMissingnessSet
+        country:
+          missingness:
+            allowed:
+            - nr
+            forbidden: []
+          meta:
+          - ruleID: missingness
+            meta:
+            - partID: country
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: country
+              missingnessSet: nrMissingnessSet
+            - partID: nr
+              setID: nrMissingnessSet
+      meta:
+      - partID: sites
+        partType: tables
+        version1Location: tables
+        version1Table: Site
+  Sample:
+    type: list
+    schema:
+      type: dict
+      schema:
+        siteID:
+          missingness:
+            allowed:
+            - NA
+            - nan
+            - nr
+            forbidden: []
+          meta:
+          - ruleID: missingness
+            meta:
+            - partID: siteID
+              samples: fK
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Site;Sample
+              version1Variable: siteID
+              missingnessSet: genMissingnessSet
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+      meta:
+      - partID: samples
+        partType: tables
+        version1Location: tables
+        version1Table: Sample

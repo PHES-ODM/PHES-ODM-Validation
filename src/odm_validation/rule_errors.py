@@ -13,7 +13,13 @@ from odm_validation.input_data import DataKind
 from odm_validation.reports import ErrorKind, ValidationCtx, get_row_num
 from odm_validation.rule_filters import RuleFilter
 from odm_validation.rules import Rule, RuleId, get_anyof_constraint, ruleset
-from odm_validation.schemas import CerberusSchema, Schema, init_table_schema
+from odm_validation.schemas import (
+    CerberusSchema,
+    MISSINGNESS_ALLOWED_KEY,
+    MISSINGNESS_KEY,
+    Schema,
+    init_table_schema,
+)
 from odm_validation.stdext import (
     countdown,
     deep_update,
@@ -78,7 +84,13 @@ def _transform_rule(rule: Rule, column_meta: pt.ColMeta) -> Rule:
     return rule
 
 
-def _get_allowed_values(cerb_rules: dict[str, str]) -> set[str]:
+def _get_allowed_values(cerb_rule: str, cerb_rules: dict) -> set[str]:
+    """Returns the values allowed by `cerb_rule` in the column schema
+    `cerb_rules`."""
+    if cerb_rule == MISSINGNESS_KEY:
+        # the missingness rule has its own set of allowed values
+        constraint: dict = cerb_rules.get(MISSINGNESS_KEY) or {}
+        return set(map(str, constraint.get(MISSINGNESS_ALLOWED_KEY, [])))
     return set(map(str, cerb_rules.get('allowed', [])))
 
 
@@ -148,7 +160,8 @@ def _gen_error_entry(
     odm_type = _extract_datatype(column_meta)
     datatype = odm_type or _cerb_to_odm_type(cerb_type)
 
-    allowed = _get_allowed_values(schema_column) if schema_column else set()
+    allowed = (_get_allowed_values(cerb_rule, schema_column) if schema_column
+               else set())
     kind = ErrorKind.WARNING if rule.is_warning else ErrorKind.ERROR
     error_ctx = reports.ErrorCtx(
         allowed_values=allowed,

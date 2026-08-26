@@ -1,0 +1,38 @@
+{
+    "errors": [
+        {
+            "errorType": "missingness",
+            "tableName": "sites",
+            "columnName": "siteID",
+            "invalidValue": "NA",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "NA",
+                "geoLat": "1",
+                "country": "CA"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "siteID",
+                    "sites": "pK",
+                    "sitesRequired": "mandatory",
+                    "missingnessSet": "genMissingnessSet"
+                },
+                {
+                    "partID": "NA",
+                    "partType": "missingness"
+                },
+                {
+                    "partID": "nan",
+                    "partType": "missingness"
+                },
+                {
+                    "partID": "nr",
+                    "partType": "missingness"
+                }
+            ],
+            "message": "missingness rule violated in table sites, column siteID, row(s) 1: Invalid missingness value \"NA\", the allowed missingness values are none"
+        }
+    ],
+    "warnings": []
+}
