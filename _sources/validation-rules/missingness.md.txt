@@ -1,0 +1,637 @@
+# missingness
+
+
+This rule identifies the missingness values that a column can take on,
+and reports the columns that can’t take on any at all.
+
+A column can take on missingness values when the `missingnessSet` column
+in the dictionary has a value for it. The allowed values are then the
+members of that set, as listed in the sets sheet. For example, a column
+with a `missingnessSet` of `nrNAMissingnessSet` can take on `NA` and
+`nr`, while a column with a `missingnessSet` of `genMissingnessSet` can
+take on any of the dictionary’s missingness values.
+
+A value that a column can take on is a statement that the value is
+missing, rather than a value of the column’s own domain, which is why it
+is exempt from [the other validation
+rules](#relation-to-the-other-validation-rules).
+
+A value that the column can **not** take on is not a missingness value
+in that column, and this rule therefore has nothing to say about it. It
+is left to the other validation rules to decide whether it is valid, the
+same way as any other value. A column of country codes whose missingness
+set only holds `NULL` is a good example: `NA` is not a missingness value
+there, it is the country code of Namibia, and the rules that constrain
+the shape of a value get to judge it.
+
+A primary key is the exception. It identifies an entry and can therefore
+never be missing, so a column that is the primary key of a table can’t
+take on any missingness value, and every missingness value in it is
+reported by this rule. This holds even when the column has a missingness
+set, and even when the same column is not the primary key of another
+table.
+
+Consider a `sites` table where `siteID` is the primary key, `geoLat` has
+a `missingnessSet` of `nrNAMissingnessSet` and `country` has one that
+only holds `nr`. The following ODM dataset snippet would fail
+validation, because the primary key `siteID` can’t be missing,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                Invalid Sites Table                                                </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                             </span>┃<span style="font-weight: bold"> geoLat                             </span>┃<span style="font-weight: bold"> country                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ NA                                 │ 1                                  │ CA                                    │
+└────────────────────────────────────┴────────────────────────────────────┴───────────────────────────────────────┘
+</pre>
+
+The following dataset snippet would pass validation. `NA` and `nr` are
+missingness values that `geoLat` can take on, `nr` is one that `country`
+can take on, and the `NA` in `country` is not a missingness value there,
+but a country code,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                 Valid Sites Table                                                 </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                             </span>┃<span style="font-weight: bold"> geoLat                             </span>┃<span style="font-weight: bold"> country                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                  │ NA                                 │ NA                                    │
+│ 2                                  │ nr                                 │ nr                                    │
+└────────────────────────────────────┴────────────────────────────────────┴───────────────────────────────────────┘
+</pre>
+
+The same `siteID` column is a foreign key in the `samples` table, where
+it is not the primary key. It can take on the missingness values of its
+`genMissingnessSet`, so the following dataset snippet would pass
+validation as well,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                Valid Samples Table                                                </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                                                                                                          </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ NA                                                                                                              │
+│ nan                                                                                                             │
+│ nr                                                                                                              │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+
+## Error report
+
+The error report will have the following fields
+
+- **errorType**: missingness
+- **tableName**: The name of the table with the invalid missingness
+  value
+- **columnName**: The name of the column with the invalid missingness
+  value
+- **invalidValue**: The invalid missingness value
+- **rowNumber**: The index of the table row with the error
+- **row**: The dictionary containing the row
+- **validationRuleFields**: The ODM data dictionary rows used to
+  generate this rule
+- **message**: Invalid missingness value \<invalid_value\> found in row
+  \<row_index\> for column \<column_name\> in table \<table_name\>. The
+  allowed missingness values are \<allowed_missingness_values\>
+
+The error report for the invalid dataset is shown below. The allowed
+missingness values are reported as `none`, since a primary key can’t be
+missing,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'country'</span>: <span style="color: #008000; text-decoration-color: #008000">'CA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness rule violated in table sites, column siteID, row(s) 1: Invalid missingness value "NA", the allowed missingness values are none'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+
+## Relation to the other validation rules
+
+A missingness value is a placeholder for a value rather than a value of
+the column’s own domain. An allowed missingness value is therefore
+exempt from the rules that constrain the shape of a value:
+[invalid_type](invalid_type.qmd),
+[invalid_category](invalid_category.qmd),
+[less_than_min_value](less_than_min_value.qmd),
+[greater_than_max_value](greater_than_max_value.qmd),
+[less_than_min_length](less_than_min_length.qmd),
+[greater_than_max_length](greater_than_max_length.qmd) and
+[duplicate_entries_found](duplicate_entries_found.qmd). It is also
+exempt from type coercion. A value of `NA` in the float column `geoLat`
+above is valid and is left as-is, instead of being reported as a type
+error.
+
+A value that violates this rule is exempt from those rules as well, so
+that a single invalid missingness value isn’t reported twice.
+
+A value that the column can’t take on is **not** exempt, since it isn’t
+a missingness value in that column. It is validated by those rules like
+any other value: a `nan` in the country column above is reported by
+[greater_than_max_length](greater_than_max_length.qmd), because a
+country code is at most two characters long, and not by this rule.
+
+A missingness value states why a value is absent, which is a valid way
+of populating a mandatory column, so
+[missing_values_found](missing_values_found.qmd) is not triggered by one
+either. That rule only reports a mandatory column that has been left
+empty. An identifier that is missing is reported by this rule instead,
+since a primary key has no allowed missingness values.
+
+## Rule metadata
+
+The metadata for this rule is contained in both the parts and the sets
+sheet in the data dictionary. The steps involved are:
+
+1.  [Get the table names from the
+    dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
+2.  [Get all the columns for each
+    table](../specs/odm-how-tos.md#how-to-get-the-columns-names-for-a-table)
+3.  For each column, get the missingness set id from its
+    `missingnessSet` column. Skip the column if it doesn’t have one and
+    it isn’t the primary key of the table.
+4.  Get the missingness values of that set from the sets sheet
+    1.  Filter the sets to only include those whose `setType` column is
+        `missingnessSets` and whose `setID` column is the missingness
+        set id
+    2.  The `partID` column has the missingness value
+5.  If the column is the primary key of the table, then it has no
+    allowed missingness values, and the forbidden values are all of the
+    dictionary’s missingness values, which are the parts whose
+    `partType` column is `missingness`
+6.  Every other column has no forbidden values, since a value outside
+    its missingness set isn’t a missingness value in that column
+7.  Add this rule for the column
+
+For example, the ODM snippets below will be used to generate the
+validation schema for the examples above,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v2                                                      </span>
+┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┓
+┃<span style="font-weight: bold"> partID  </span>┃<span style="font-weight: bold"> partTy… </span>┃<span style="font-weight: bold"> status </span>┃<span style="font-weight: bold"> sites  </span>┃<span style="font-weight: bold"> sitesR… </span>┃<span style="font-weight: bold"> sampl… </span>┃<span style="font-weight: bold"> sample… </span>┃<span style="font-weight: bold"> dataT… </span>┃<span style="font-weight: bold"> maxLen… </span>┃<span style="font-weight: bold"> missi… </span>┃<span style="font-weight: bold"> firstR… </span>┃<span style="font-weight: bold"> lastU… </span>┃
+┡━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━┩
+│ NA      │ missin… │ active │ NA     │ NA      │ NA     │ NA      │ varch… │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ nan     │ missin… │ active │ NA     │ NA      │ NA     │ NA      │ varch… │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ nr      │ missin… │ active │ NA     │ NA      │ NA     │ NA      │ varch… │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ sites   │ tables  │ active │ NA     │ NA      │ NA     │ NA      │ NA     │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ samples │ tables  │ active │ NA     │ NA      │ NA     │ NA      │ NA     │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ siteID  │ attrib… │ active │ pK     │ mandat… │ fK     │ option… │ varch… │ NA      │ genMi… │ 1.0.0   │ 2.0.0  │
+│ geoLat  │ attrib… │ active │ header │ mandat… │ NA     │ NA      │ float  │ NA      │ nrNAM… │ 1.0.0   │ 2.0.0  │
+│ geoLong │ attrib… │ active │ header │ option… │ NA     │ NA      │ float  │ NA      │ NA     │ 1.0.0   │ 2.0.0  │
+│ country │ attrib… │ active │ header │ option… │ NA     │ NA      │ varch… │ 2       │ nrMis… │ 1.0.0   │ 2.0.0  │
+└─────────┴─────────┴────────┴────────┴─────────┴────────┴─────────┴────────┴─────────┴────────┴─────────┴────────┘
+</pre>
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                      Sets v2                                                      </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> setID                     </span>┃<span style="font-weight: bold"> setType               </span>┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> status    </span>┃<span style="font-weight: bold"> firstReleased      </span>┃<span style="font-weight: bold"> lastUpdated    </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━┩
+│ genMissingnessSet         │ missingnessSets       │ NA        │ active    │ 1.0.0              │ 2.0.0          │
+│ genMissingnessSet         │ missingnessSets       │ nan       │ active    │ 1.0.0              │ 2.0.0          │
+│ genMissingnessSet         │ missingnessSets       │ nr        │ active    │ 1.0.0              │ 2.0.0          │
+│ nrNAMissingnessSet        │ missingnessSets       │ NA        │ active    │ 1.0.0              │ 2.0.0          │
+│ nrNAMissingnessSet        │ missingnessSets       │ nr        │ active    │ 1.0.0              │ 2.0.0          │
+│ nrMissingnessSet          │ missingnessSets       │ nr        │ active    │ 1.0.0              │ 2.0.0          │
+└───────────────────────────┴───────────────────────┴───────────┴───────────┴────────────────────┴────────────────┘
+</pre>
+
+The rule is added to the `siteID`, `geoLat` and `country` columns, but
+not to the `geoLong` column, which neither has a missingness set nor is
+a primary key.
+
+## Cerberus Schema
+
+Cerberus does not have support for this rule. We need to [extend the
+cerberus
+validator](https://docs.python-cerberus.org/en/stable/customize.html)
+with a custom rule called `missingness`. Its constraint has two fields,
+which partition the dictionary’s missingness values into the ones the
+column accepts and the ones it doesn’t:
+
+- **allowed**: The missingness values the column can take on
+- **forbidden**: The missingness values that trigger this rule, which is
+  everything for a primary key and nothing for the other columns
+
+Both fields are needed, because the validator has to be able to tell a
+missingness value that is reported apart from one that is exempted. A
+value in neither field is left alone. The custom rule is evaluated
+before the other cerberus rules for the column, so that it can exempt
+the allowed missingness values from them.
+
+The cerberus schema for the ODM dictionary snippets above is shown
+below,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'country'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'country'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'optional'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'fK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samplesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'optional'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+
+The `meta` field for this rule should have multiple entries,
+
+- the row from the parts sheet for the column. The entry should include
+  the `partID`, the `<table_name>`, the `<table_name>Required` and the
+  `missingnessSet` fields.
+- and an entry per missingness value in the set. This entry should
+  include the `partID` and the `setID` column. For a primary key, whose
+  constraint comes from the missingness parts rather than from a set,
+  the entries are the forbidden missingness parts instead, and they
+  should include the `partID` and the `partType` column.
+
+## ODM Version 1
+
+For version 1 validation schemas, we add this rule to only those version
+2 columns which have a [version 1 equivalent
+part](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part).
+
+For the ODM snippet below,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v1                                                      </span>
+┏━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┓
+┃<span style="font-weight: bold"> part… </span>┃<span style="font-weight: bold"> part… </span>┃<span style="font-weight: bold"> stat… </span>┃<span style="font-weight: bold"> sit… </span>┃<span style="font-weight: bold"> site… </span>┃<span style="font-weight: bold"> sam… </span>┃<span style="font-weight: bold"> samp… </span>┃<span style="font-weight: bold"> dat… </span>┃<span style="font-weight: bold"> maxL… </span>┃<span style="font-weight: bold"> mis… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> ver… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> fir… </span>┃<span style="font-weight: bold"> last… </span>┃
+┡━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━┩
+│ NA    │ miss… │ acti… │ NA   │ NA    │ NA   │ NA    │ var… │ NA    │ NA   │ NA    │ NA   │ NA    │ 1.0… │ 2.0.0 │
+│ nan   │ miss… │ acti… │ NA   │ NA    │ NA   │ NA    │ var… │ NA    │ NA   │ NA    │ NA   │ NA    │ 1.0… │ 2.0.0 │
+│ nr    │ miss… │ acti… │ NA   │ NA    │ NA   │ NA    │ var… │ NA    │ NA   │ NA    │ NA   │ NA    │ 1.0… │ 2.0.0 │
+│ sites │ tabl… │ acti… │ NA   │ NA    │ NA   │ NA    │ NA   │ NA    │ NA   │ tabl… │ Site │ NA    │ 1.0… │ 2.0.0 │
+│ samp… │ tabl… │ acti… │ NA   │ NA    │ NA   │ NA    │ NA   │ NA    │ NA   │ tabl… │ Sam… │ NA    │ 1.0… │ 2.0.0 │
+│ site… │ attr… │ acti… │ pK   │ mand… │ fK   │ opti… │ var… │ NA    │ gen… │ vari… │ Sit… │ site… │ 1.0… │ 2.0.0 │
+│ geoL… │ attr… │ acti… │ hea… │ mand… │ NA   │ NA    │ flo… │ NA    │ nrN… │ vari… │ Site │ lati… │ 1.0… │ 2.0.0 │
+│ geoL… │ attr… │ acti… │ hea… │ opti… │ NA   │ NA    │ flo… │ NA    │ NA   │ vari… │ Site │ long… │ 1.0… │ 2.0.0 │
+│ coun… │ attr… │ acti… │ hea… │ opti… │ NA   │ NA    │ var… │ 2     │ nrM… │ vari… │ Site │ coun… │ 1.0… │ 2.0.0 │
+└───────┴───────┴───────┴──────┴───────┴──────┴───────┴──────┴───────┴──────┴───────┴──────┴───────┴──────┴───────┘
+</pre>
+
+The corresponding cerberus schema would be,
+
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'1.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site;Sample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'latitude'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'latitude'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrNAMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'country'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'country'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'optional'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'country'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nrMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'Sample'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingness'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'nr'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'fK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samplesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'optional'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site;Sample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'missingnessSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nan'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'nr'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'genMissingnessSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+
+The meta field for version 1 includes everything in version 2 but should
+also include the following columns for the entry for the column,
+
+- `version1Location`
+- `version1Table`
+- `version1Variable`
+
+Note that the ODM only defines missingness sets from version 2.0.0
+onwards, since the rows of the sets sheet that define the missingness
+sets are not part of version 1. A version 1 schema generated from a
+version 2 dictionary therefore only has missingness rules for its
+primary keys, whose constraint doesn’t come from a set.

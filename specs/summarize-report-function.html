@@ -103,21 +103,21 @@ keys are summarized by.</p>
 <p>The table information is taken from the validation report’s <code class="docutils literal notranslate"><span class="pre">table_info</span></code>
 field.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>overview = {
-    &#39;tables&#39;: {
-        &#39;addresses&#39;: {
-            &#39;columns&#39;: 2,
-            &#39;rows&#39;: 6,
-            &#39;rules&#39;: {
-                &#39;x&#39;: 4,
-                &#39;y&#39;: 2,
+    'tables': {
+        'addresses': {
+            'columns': 2,
+            'rows': 6,
+            'rules': {
+                'x': 4,
+                'y': 2,
             }
         }
     },
-    &#39;errors&#39;: {
-        &#39;x&#39;: 4,
-        &#39;y&#39;: 2,
+    'errors': {
+        'x': 4,
+        'y': 2,
     },
-    &#39;warnings&#39;: {
+    'warnings': {
     }
 }
 </pre></div>
@@ -132,34 +132,34 @@ objects’ with the appropriate fields for the selected group key,</p>
     count: int
 
     key: SummaryKey
-    &quot;&quot;&quot;The group/summary-key this entry is summarized by.&quot;&quot;&quot;
+    """The group/summary-key this entry is summarized by."""
 
     value: str
-    &quot;&quot;&quot;Id of the entity in group `key` that this entry is derived from. This
+    """Id of the entity in group `key` that this entry is derived from. This
     corresponds to the table-id when grouping by `table`, the column-id when
-    grouping by `column`, etc.&quot;&quot;&quot;
+    grouping by `column`, etc."""
 
 E = SummaryEntry
 
 ErrorSummary = Dict[TableId, List[E]]
 
 errors: ErrorSummary = {
-    &#39;addresses&#39;: [
-        E(ruleId=&#39;x&#39;, count=4, key=&#39;table&#39;,  value=&#39;addresses&#39;),
-        E(ruleId=&#39;y&#39;, count=2, key=&#39;table&#39;,  value=&#39;addresses&#39;),
-        E(ruleId=&#39;x&#39;, count=1, key=&#39;column&#39;, value=&#39;addId&#39;),
-        E(ruleId=&#39;y&#39;, count=2, key=&#39;column&#39;, value=&#39;addId&#39;),
-        E(ruleId=&#39;x&#39;, count=3, key=&#39;column&#39;, value=&#39;addL1&#39;),
-        E(ruleId=&#39;x&#39;, count=2, key=&#39;row&#39;,    value=&#39;1&#39;),
-        E(ruleId=&#39;y&#39;, count=1, key=&#39;row&#39;,    value=&#39;1&#39;),
-        E(ruleId=&#39;x&#39;, count=2, key=&#39;row&#39;,    value=&#39;2&#39;),
-        E(ruleId=&#39;y&#39;, count=1, key=&#39;row&#39;,    value=&#39;2&#39;),
+    'addresses': [
+        E(ruleId='x', count=4, key='table',  value='addresses'),
+        E(ruleId='y', count=2, key='table',  value='addresses'),
+        E(ruleId='x', count=1, key='column', value='addId'),
+        E(ruleId='y', count=2, key='column', value='addId'),
+        E(ruleId='x', count=3, key='column', value='addL1'),
+        E(ruleId='x', count=2, key='row',    value='1'),
+        E(ruleId='y', count=1, key='row',    value='1'),
+        E(ruleId='x', count=2, key='row',    value='2'),
+        E(ruleId='y', count=1, key='row',    value='2'),
 
-        E(ruleId=&#39;_all&#39;, count=6, key=&#39;table&#39;,  value=&#39;addresses&#39;),
-        E(ruleId=&#39;_all&#39;, count=3, key=&#39;column&#39;, value=&#39;addId&#39;),
-        E(ruleId=&#39;_all&#39;, count=3, key=&#39;column&#39;, value=&#39;addL1&#39;),
-        E(ruleId=&#39;_all&#39;, count=3, key=&#39;row&#39;,    value=&#39;1&#39;),
-        E(ruleId=&#39;_all&#39;, count=3, key=&#39;row&#39;,    value=&#39;2&#39;),
+        E(ruleId='_all', count=6, key='table',  value='addresses'),
+        E(ruleId='_all', count=3, key='column', value='addId'),
+        E(ruleId='_all', count=3, key='column', value='addL1'),
+        E(ruleId='_all', count=3, key='row',    value='1'),
+        E(ruleId='_all', count=3, key='row',    value='2'),
     ]
 }
 </pre></div>
@@ -194,15 +194,15 @@ summary.</p>
 ErrorSummary = Dict[TableId, Dict[SummaryKey, Dict[str, Count]]]
 
 errors: ErrorSummary = {
-    &#39;addresses&#39;: {
-        table: {&#39;x&#39;: 4, &#39;y&#39;: 2, &#39;_all&#39;: 6},
+    'addresses': {
+        table: {'x': 4, 'y': 2, '_all': 6},
         column: {
-            &#39;addId&#39;: {&#39;x&#39;: 1, &#39;y&#39;: 2, &#39;_all&#39;: 3},
-            &#39;addL1&#39;: {&#39;x&#39;: 3, &#39;_all&#39;: 3},
+            'addId': {'x': 1, 'y': 2, '_all': 3},
+            'addL1': {'x': 3, '_all': 3},
         },
         row: {
-            &#39;1&#39;: {&#39;x&#39;: 2, &#39;y&#39;: 1, &#39;_all&#39;: 3},
-            &#39;2&#39;: {&#39;x&#39;: 2, &#39;y&#39;: 1, &#39;_all&#39;: 3},
+            '1': {'x': 2, 'y': 1, '_all': 3},
+            '2': {'x': 2, 'y': 1, '_all': 3},
         }
     }
 }

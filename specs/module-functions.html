@@ -55,26 +55,26 @@ schema object should ideally be generated using the
 schema</a></p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;schemaVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;addressID&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addressID&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;PK&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;mandatory&quot;</span><span class="p">,</span>
+    <span class="s2">"schemaVersion"</span><span class="p">:</span> <span class="s2">"1.2.3"</span><span class="p">,</span>
+    <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+            <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
+                <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"addressID"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">"required"</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addressID"</span><span class="p">,</span>
+                            <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"PK"</span><span class="p">,</span>
+                            <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"mandatory"</span><span class="p">,</span>
                         <span class="p">}</span>
                     <span class="p">},</span>
-                    <span class="s2">&quot;addL2&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contactID&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;PK&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;contactsRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+                    <span class="s2">"addL2"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"contactID"</span><span class="p">,</span>
+                            <span class="s2">"contacts"</span><span class="p">:</span> <span class="s2">"PK"</span><span class="p">,</span>
+                            <span class="s2">"contactsRequired"</span><span class="p">:</span> <span class="s2">"NA"</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
@@ -94,28 +94,28 @@ as contained in the ODM data dictionary and values is a list
 containing the table rows.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;addressID&quot;</span><span class="p">:</span> <span class="s2">&quot;WastewaterSiteOttawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addL1&quot;</span><span class="p">:</span> <span class="s2">&quot;123 Laurier Avenue&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addL2&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Ottawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Canada&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;datasetID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stateProvReg&quot;</span><span class="p">:</span> <span class="s2">&quot;Ontario&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;zipCode&quot;</span><span class="p">:</span> <span class="s2">&quot;KE2 TYU&quot;</span>
+            <span class="s2">"addressID"</span><span class="p">:</span> <span class="s2">"WastewaterSiteOttawa"</span><span class="p">,</span>
+            <span class="s2">"addL1"</span><span class="p">:</span> <span class="s2">"123 Laurier Avenue"</span><span class="p">,</span>
+            <span class="s2">"addL2"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"Ottawa"</span><span class="p">,</span>
+            <span class="s2">"country"</span><span class="p">:</span> <span class="s2">"Canada"</span><span class="p">,</span>
+            <span class="s2">"datasetID"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"stateProvReg"</span><span class="p">:</span> <span class="s2">"Ontario"</span><span class="p">,</span>
+            <span class="s2">"zipCode"</span><span class="p">:</span> <span class="s2">"KE2 TYU"</span>
         <span class="p">}</span>
     <span class="p">],</span>
-    <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"contacts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;contactID&quot;</span><span class="p">:</span> <span class="s2">&quot;OttawaWWContact&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;organizationID&quot;</span><span class="p">:</span> <span class="s2">&quot;WWOttawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;ww@ottawa.ca&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;6137458999&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Technician&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+            <span class="s2">"contactID"</span><span class="p">:</span> <span class="s2">"OttawaWWContact"</span><span class="p">,</span>
+            <span class="s2">"organizationID"</span><span class="p">:</span> <span class="s2">"WWOttawa"</span><span class="p">,</span>
+            <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"ww@ottawa.ca"</span><span class="p">,</span>
+            <span class="s2">"phone"</span><span class="p">:</span> <span class="s2">"6137458999"</span><span class="p">,</span>
+            <span class="s2">"firstName"</span><span class="p">:</span> <span class="s2">"John"</span><span class="p">,</span>
+            <span class="s2">"lastName"</span><span class="p">:</span> <span class="s2">"Doe"</span><span class="p">,</span>
+            <span class="s2">"role"</span><span class="p">:</span> <span class="s2">"Technician"</span><span class="p">,</span>
+            <span class="s2">"notes"</span><span class="p">:</span> <span class="s2">""</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -229,20 +229,20 @@ a list containing the sheet rows. Currently the parts and sets
 sheet are required.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Address table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Address table"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"NA"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addressID&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Address ID&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;pK&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;mandatory&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addressID"</span><span class="p">,</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Address ID"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"attribute"</span><span class="p">,</span>
+            <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"pK"</span><span class="p">,</span>
+            <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"mandatory"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -260,15 +260,15 @@ a list containing the sheet rows. Currently the parts and sets
 sheet are required.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"sets"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectCat&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;flowPr&quot;</span>
+            <span class="s2">"setID"</span><span class="p">:</span> <span class="s2">"collectCat"</span><span class="p">,</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"flowPr"</span>
         <span class="p">},</span>
         <span class="p">{</span>
 
-            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectCat&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8h&quot;</span>
+            <span class="s2">"setID"</span><span class="p">:</span> <span class="s2">"collectCat"</span><span class="p">,</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"comp8h"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -291,11 +291,11 @@ below,</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="c1"># The name of the table whose validation rules to update</span>
-    <span class="s2">&quot;&lt;table_name&gt;&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"&lt;table_name&gt;"</span><span class="p">:</span> <span class="p">{</span>
         <span class="c1"># The name of the column whose validation rules to update</span>
-        <span class="s2">&quot;&lt;column_name&gt;&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"&lt;column_name&gt;"</span><span class="p">:</span> <span class="p">{</span>
             <span class="c1"># Adds or updates the allowed rule for this column</span>
-            <span class="s2">&quot;allowed&quot;</span><span class="p">:</span> <span class="n">string</span><span class="p">[]</span>
+            <span class="s2">"allowed"</span><span class="p">:</span> <span class="n">string</span><span class="p">[]</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -313,37 +313,37 @@ generated during the generation process.</p>
 field for debugging purposes.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;schemaVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;addressID&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"schemaVersion"</span><span class="p">:</span> <span class="s2">"1.2.3"</span><span class="p">,</span>
+    <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+            <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
+                <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"addressID"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">"required"</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">[</span>
                             <span class="p">{</span>
-                                <span class="s2">&quot;ruleId&quot;</span><span class="p">:</span> <span class="s2">&quot;missing_mandatory_column&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="s2">"ruleId"</span><span class="p">:</span> <span class="s2">"missing_mandatory_column"</span><span class="p">,</span>
+                                <span class="s2">"meta"</span><span class="p">:</span> <span class="p">[</span>
                                     <span class="p">{</span>
-                                        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addressID&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;PK&quot;</span><span class="p">,</span>
-                                        <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;mandatory&quot;</span><span class="p">,</span>
+                                        <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addressID"</span><span class="p">,</span>
+                                        <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"PK"</span><span class="p">,</span>
+                                        <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"mandatory"</span><span class="p">,</span>
                                     <span class="p">}</span>
                                 <span class="p">]</span>
                             <span class="p">}</span>
                         <span class="p">]</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+                <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+                    <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;warnings&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="s2">"warnings"</span><span class="p">:</span> <span class="p">[]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -369,28 +369,28 @@ version to another.</p></li>
 for the version in the <code class="docutils literal notranslate"><span class="pre">version</span></code> argument.</p>
 <p>Example of an <code class="docutils literal notranslate"><span class="pre">odm_data_dictionary</span></code> parameter is shown below,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Address table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;changes&quot;</span><span class="p">:</span> <span class="s2">&quot;added in version 2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Address table"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"tables"</span><span class="p">,</span>
+            <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"active"</span><span class="p">,</span>
+            <span class="s2">"changes"</span><span class="p">:</span> <span class="s2">"added in version 2"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"2"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Composite grab sample of 3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;depreciated&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;changes&quot;</span><span class="p">:</span> <span class="s2">&quot;Use grab with collection number (collectNum) = 3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"comp3"</span><span class="p">,</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Composite grab sample of 3"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"categories"</span><span class="p">,</span>
+            <span class="s2">"addresses"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"addressesRequired"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"depreciated"</span><span class="p">,</span>
+            <span class="s2">"changes"</span><span class="p">:</span> <span class="s2">"Use grab with collection number (collectNum) = 3"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -409,37 +409,37 @@ and lastUpdated = ‘2’) and should only be included in version 1
 set. These values can be different from the versioning fields in the
 parts sheet. For example, consider the following ODM snippet,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;samples&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"samples"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"tables"</span><span class="p">,</span>
+            <span class="s2">"samples"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">}</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;collType&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mmaSet&quot;</span><span class="p">:</span> <span class="s2">&quot;collectSet&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"collType"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"attributes"</span><span class="p">,</span>
+            <span class="s2">"samples"</span><span class="p">:</span> <span class="s2">"header"</span><span class="p">,</span>
+            <span class="s2">"mmaSet"</span><span class="p">:</span> <span class="s2">"collectSet"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8r&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mmaSet&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"comp8r"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"measures"</span><span class="p">,</span>
+            <span class="s2">"samples"</span><span class="p">:</span> <span class="s2">"header"</span><span class="p">,</span>
+            <span class="s2">"mmaSet"</span><span class="p">:</span> <span class="s2">"NA"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">}</span>
     <span class="p">],</span>
-    <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"sets"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectSet&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8r&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="s2">"setID"</span><span class="p">:</span> <span class="s2">"collectSet"</span><span class="p">,</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"comp8r"</span><span class="p">,</span>
+            <span class="s2">"firstReleased"</span><span class="p">:</span> <span class="s2">"2"</span><span class="p">,</span>
+            <span class="s2">"lastUpdated"</span><span class="p">:</span> <span class="s2">"2"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>

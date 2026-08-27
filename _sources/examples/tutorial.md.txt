@@ -103,8 +103,8 @@ print(report.data_version)
 ```
 
     1.0.0b1
-    2.2.3
-    2.2.3
+    3.0.1
+    3.0.1
 
 ## Schema generation
 

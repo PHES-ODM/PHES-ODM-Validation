@@ -43,7 +43,7 @@ meets the ODM dictionary format.</p>
 <p>Validation is performed based on a set of rules defined in a schema. The
 <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function is used to perform the validation on <code class="docutils literal notranslate"><span class="pre">data</span></code>
 with the <code class="docutils literal notranslate"><span class="pre">schema</span></code> specified.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">import_schema</span><span class="p">(</span><span class="s2">&quot;schema.yml&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">import_schema</span><span class="p">(</span><span class="s2">"schema.yml"</span><span class="p">)</span>
 <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -127,7 +127,7 @@ newcommers.</p>
 <section id="generate-a-schema-from-the-odm-dictionary">
 <h2>Generate a schema from the ODM dictionary<a class="headerlink" href="#generate-a-schema-from-the-odm-dictionary" title="Link to this heading">¶</a></h2>
 <p>You can genereate your own schema directly from the ODM parts table.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;parts.csv&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">"parts.csv"</span><span class="p">)</span>
 <span class="n">schema</span> <span class="o">=</span> <span class="n">generate_cerberus_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
 <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>

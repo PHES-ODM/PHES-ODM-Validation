@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="validation-rules/less_than_min_value.html">less_than_min_value</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validation-rules/missing_mandatory_column.html">missing_mandatory_column</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validation-rules/missing_values_found.html">missing_values_found</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation-rules/missingness.html">missingness</a></li>
 </ul>
 </div>
 <section id="validation-rule-guide">
@@ -183,14 +184,14 @@ and the <code class="docutils literal notranslate"><span class="pre">partType</s
 implies that the corresponding part in the <code class="docutils literal notranslate"><span class="pre">partID</span></code> column is the name of a
 table. For example, consider the following ODM dictionary,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contacts&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"contacts"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -198,28 +199,28 @@ table. For example, consider the following ODM dictionary,</p>
 </div>
 <p>The corresponding cerberus high level object would be,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"contacts"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contacts&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"contacts"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -240,24 +241,24 @@ values are <code class="docutils literal notranslate"><span class="pre">tables</
 a table part has a version 1 equivalent, then this column will have a value,
 otherwise it will be empty. For example, consider the ODM snippet below,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"tables"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contacts&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"contacts"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"tables"</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;WWMeasure;SiteMeasure;CovidPublicHealthData&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"measures"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"WWMeasure;SiteMeasure;CovidPublicHealthData"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -265,60 +266,60 @@ otherwise it will be empty. For example, consider the ODM snippet below,</p>
 </div>
 <p>The corresponding cerberus schema for version 1 of the ODM would be,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"addresses"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">"addresses"</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"tables"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;WWMeasure&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"WWMeasure"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;WWMeasure; SiteMeasure;CovidPublicHealthData&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"measures"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"WWMeasure; SiteMeasure;CovidPublicHealthData"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;SiteMeasure&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"SiteMeasure"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;WWMeasure; SiteMeasure;CovidPublicHealthData&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"measures"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"WWMeasure; SiteMeasure;CovidPublicHealthData"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;CovidPublicHealthData&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="s2">"CovidPublicHealthData"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"list"</span><span class="p">,</span>
+        <span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"dict"</span><span class="p">,</span>
             <span class="c1"># The remaining schema fields are filled using the rest of the</span>
             <span class="c1"># dictionary</span>
         <span class="p">},</span>
-        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;WWMeasure; SiteMeasure;CovidPublicHealthData&quot;</span>
+        <span class="s2">"meta"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"measures"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"WWMeasure; SiteMeasure;CovidPublicHealthData"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -330,20 +331,20 @@ this will need to be taken into account.</p>
 <code class="docutils literal notranslate"><span class="pre">version1Location</span></code>, <code class="docutils literal notranslate"><span class="pre">version1Table</span></code>, and <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code> columns. For
 example,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"parts"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;instruments&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Instrument&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"instruments"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"table"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">"Instrument"</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"tables"</span><span class="p">,</span>
+            <span class="s2">"version1Variable"</span><span class="p">:</span> <span class="s2">""</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Instrument&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;model&quot;</span>
+            <span class="s2">"partID"</span><span class="p">:</span> <span class="s2">"model"</span><span class="p">,</span>
+            <span class="s2">"partType"</span><span class="p">:</span> <span class="s2">"attribute"</span><span class="p">,</span>
+            <span class="s2">"version1Table"</span><span class="p">:</span> <span class="s2">"Instrument"</span><span class="p">,</span>
+            <span class="s2">"version1Location"</span><span class="p">:</span> <span class="s2">"variables"</span><span class="p">,</span>
+            <span class="s2">"version1Variable"</span><span class="p">:</span> <span class="s2">"model"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -393,6 +394,7 @@ it.</p>
 <li class="toctree-l2"><a class="reference internal" href="validation-rules/less_than_min_value.html">less_than_min_value</a></li>
 <li class="toctree-l2"><a class="reference internal" href="validation-rules/missing_mandatory_column.html">missing_mandatory_column</a></li>
 <li class="toctree-l2"><a class="reference internal" href="validation-rules/missing_values_found.html">missing_values_found</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation-rules/missingness.html">missingness</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validation-rule-guide">Validation rule guide</a></li>
 </ul>
 </li>
