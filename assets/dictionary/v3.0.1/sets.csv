@@ -1432,3 +1432,7 @@ templateSheetSet_phActions,templateSheetSet,dictSets,phActions,Public Health Act
 templateSheetSet_polygonRelationships,templateSheetSet,dictSets,polygonRelationships,Polygon Relationships Table,25,active,3.0.1,3.0.1,,
 templateSheetSet_translations,templateSheetSet,dictSets,translations,Translation look-up table,26,active,3.0.1,3.0.1,,
 geoRefMissingnessSet_NULL,geoRefMissingnessSet,missingnessSets,NULL,Null,1,active,3.0.1,3.0.1,,
+humidUnitSet_gm3,humidUnitSet,unitSets,gm3,Gram per cubic metre,1,active,3.0.1,3.0.1,,
+humidUnitSet_perc,humidUnitSet,unitSets,perc,Percent,2,active,3.0.1,3.0.1,,
+humidUnitSet_ratio,humidUnitSet,unitSets,ratio,Ratio,3,active,3.0.1,3.0.1,,
+humidUnitSet_hUn,humidUnitSet,unitSets,hUn,See Header for Unit,4,active,3.0.1,3.0.1,,

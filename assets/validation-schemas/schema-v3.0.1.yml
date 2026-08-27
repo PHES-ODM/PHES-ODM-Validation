@@ -39,6 +39,7 @@ schema:
           - meta:
             - accessions: pK
               accessionsRequired: mandatory
+              missingnessSet: genMissingnessSet
               partID: accessIndexID
             - partID: NA
               partType: missingness
@@ -97,6 +98,39 @@ schema:
               accessionsRequired: mandatory
               partID: accessNum
             ruleID: missing_values_found
+          - meta:
+            - accessions: header
+              accessionsRequired: mandatory
+              missingnessSet: genMissingnessSet
+              partID: accessNum
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
         dataHost:
@@ -197,6 +231,39 @@ schema:
               accessionsRequired: mandatory
               partID: dataHost
             ruleID: missing_values_found
+          - meta:
+            - accessions: fK
+              accessionsRequired: mandatory
+              missingnessSet: genMissingnessSet
+              partID: dataHost
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
         hostVersion:
@@ -214,6 +281,39 @@ schema:
               dataType: varchar
               partID: hostVersion
             ruleID: invalid_type
+          - meta:
+            - accessions: header
+              accessionsRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: hostVersion
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         lastEdited:
           coerce: datetime
@@ -476,6 +576,39 @@ schema:
               dataType: varchar
               partID: phActionID
             ruleID: invalid_type
+          - meta:
+            - accessions: fK
+              accessionsRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: phActionID
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -995,6 +1128,39 @@ schema:
               dataType: categorical
               partID: calcType
             ruleID: invalid_type
+          - meta:
+            - calculations: fK
+              calculationsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: calcType
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         calculationID:
           emptyTrimmed: false
@@ -1030,6 +1196,7 @@ schema:
           - meta:
             - calculations: pK
               calculationsRequired: mandatory
+              missingnessSet: genMissingnessSet
               partID: calculationID
             - partID: NA
               partType: missingness
@@ -1077,6 +1244,39 @@ schema:
               dataType: varchar
               partID: equation
             ruleID: invalid_type
+          - meta:
+            - calculations: header
+              calculationsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: equation
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         lastEdited:
           coerce: datetime
@@ -1248,7 +1448,40 @@ schema:
               minValue: '0'
               partID: order
             ruleID: less_than_min_value
+          - meta:
+            - calculations: header
+              calculationsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: order
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 0
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         pipelineID:
           emptyTrimmed: false
@@ -1276,6 +1509,39 @@ schema:
               calculationsRequired: mandatory
               partID: pipelineID
             ruleID: missing_values_found
+          - meta:
+            - calculations: fK
+              calculationsRequired: mandatory
+              missingnessSet: genMissingnessSet
+              partID: pipelineID
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
         refLink:
@@ -1335,6 +1601,39 @@ schema:
               dataType: varchar
               partID: sourceCode
             ruleID: invalid_type
+          - meta:
+            - calculations: header
+              calculationsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: sourceCode
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         standard:
           anyof:
@@ -1384,6 +1683,39 @@ schema:
               dataType: categorical
               partID: standard
             ruleID: invalid_type
+          - meta:
+            - calculations: fK
+              calculationsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: standard
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         treatmentID:
           emptyTrimmed: false
@@ -1411,6 +1743,39 @@ schema:
               calculationsRequired: mandatory
               partID: treatmentID
             ruleID: missing_values_found
+          - meta:
+            - calculations: header
+              calculationsRequired: mandatory
+              missingnessSet: genMissingnessSet
+              partID: treatmentID
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
       type: dict
@@ -2731,6 +3096,39 @@ schema:
               datasetsRequired: recommended
               partID: originalFormat
             ruleID: invalid_type
+          - meta:
+            - datasets: header
+              datasetsRequired: recommended
+              missingnessSet: genMissingnessSet
+              partID: originalFormat
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         parDatasetID:
           maxlength: 30
@@ -2971,7 +3369,7 @@ schema:
               partID: insType
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               instruments: fK
               mmaSet: insTypeSet
               partID: insType
@@ -3019,7 +3417,7 @@ schema:
               setID: insTypeSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               instruments: fK
               instrumentsRequired: mandatory
               partID: insType
@@ -4150,7 +4548,7 @@ schema:
               partID: compartmentSet
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: input
               partID: compartmentSet
             ruleID: invalid_type
@@ -4307,7 +4705,40 @@ schema:
               minValue: '1'
               partID: epiWeek
             ruleID: less_than_min_value
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: epiWeek
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 1
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         epiWeekStart:
           maxlength: 30
@@ -4318,6 +4749,39 @@ schema:
               measuresRequired: optional
               partID: epiWeekStart
             ruleID: greater_than_max_length
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: epiWeekStart
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
         epiYear:
           coerce: integer
           max: 3000
@@ -4340,7 +4804,40 @@ schema:
               minValue: '1900'
               partID: epiYear
             ruleID: less_than_min_value
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: epiYear
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 1900
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         fraction:
           anyof:
@@ -5141,6 +5638,39 @@ schema:
               measuresRequired: optional
               partID: pipelineID
             ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: pipelineID
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         polygonID:
           maxlength: 30
@@ -5429,6 +5959,39 @@ schema:
               measuresRequired: mandatoryIf
               partID: relDateEnd
             ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: mandatoryIf
+              missingnessSet: genMissingnessSet
+              partID: relDateEnd
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: datetime
         relDateStart:
           coerce: datetime
@@ -5446,6 +6009,39 @@ schema:
               measuresRequired: mandatoryIf
               partID: relDateStart
             ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: mandatoryIf
+              missingnessSet: genMissingnessSet
+              partID: relDateStart
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: datetime
         reportDate:
           coerce: datetime
@@ -5812,7 +6408,7 @@ schema:
               partID: specimenSet
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: input
               partID: specimenSet
             ruleID: invalid_type
@@ -5919,7 +6515,7 @@ schema:
               partID: unitSet
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: input
               partID: unitSet
             ruleID: invalid_type
@@ -5992,6 +6588,39 @@ schema:
               measuresRequired: optional
               partID: valTreat
             ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              missingnessSet: genMissingnessSet
+              partID: valTreat
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         value:
           emptyTrimmed: false
@@ -6019,21 +6648,40 @@ schema:
               measuresRequired: mandatory
               partID: value
             ruleID: missing_values_found
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              missingnessSet: genMissingnessSet
+              partID: value
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
-          type: string
-        version1Variable:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: input
-              partID: version1Variable
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: input
-              partID: version1Variable
-            ruleID: invalid_type
           type: string
         wSphereNotes:
           maxlength: 1000
@@ -6048,6 +6696,38 @@ schema:
               measures: input
               partID: wSphereNotes
             ruleID: invalid_type
+          - meta:
+            - measures: input
+              missingnessSet: genMissingnessSet
+              partID: wSphereNotes
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         wideMeasure:
           maxlength: 60
@@ -6062,6 +6742,38 @@ schema:
               measures: input
               partID: wideMeasure
             ruleID: invalid_type
+          - meta:
+            - measures: input
+              missingnessSet: genMissingnessSet
+              partID: wideMeasure
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         wideName:
           maxlength: 30
@@ -6076,6 +6788,38 @@ schema:
               measures: input
               partID: wideName
             ruleID: invalid_type
+          - meta:
+            - measures: input
+              missingnessSet: genMissingnessSet
+              partID: wideName
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -6709,6 +7453,39 @@ schema:
               phActions: fK
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: action
+              phActions: fK
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         actionDT:
           coerce: datetime
@@ -6719,6 +7496,39 @@ schema:
               phActions: header
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: actionDT
+              phActions: header
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: datetime
         actionGrpID:
           maxlength: 30
@@ -6735,6 +7545,39 @@ schema:
               phActions: fK
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: actionGrpID
+              phActions: fK
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         actionType:
           anyof:
@@ -6778,6 +7621,39 @@ schema:
               phActions: fK
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: actionType
+              phActions: fK
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         calcType:
           anyof:
@@ -6813,6 +7689,38 @@ schema:
               partID: calcType
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: calcType
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         calculationID:
           maxlength: 30
@@ -6827,6 +7735,38 @@ schema:
               partID: calculationID
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: calculationID
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         equation:
           maxlength: 300
@@ -6841,6 +7781,38 @@ schema:
               partID: equation
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: equation
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         lastEdited:
           coerce: datetime
@@ -7058,7 +8030,39 @@ schema:
               partID: order
               phActions: input
             ruleID: less_than_min_value
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: order
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 0
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         organizationID:
           maxlength: 100
@@ -7141,7 +8145,8 @@ schema:
               phActionsRequired: mandatory
             ruleID: missing_values_found
           - meta:
-            - partID: phActionID
+            - missingnessSet: genMissingnessSet
+              partID: phActionID
               phActions: pK
               phActionsRequired: mandatory
             - partID: NA
@@ -7188,6 +8193,38 @@ schema:
               partID: pipelineID
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: pipelineID
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         relDateEnd:
           coerce: datetime
@@ -7205,6 +8242,39 @@ schema:
               phActions: header
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: relDateEnd
+              phActions: header
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: datetime
         relDateStart:
           coerce: datetime
@@ -7222,6 +8292,39 @@ schema:
               phActions: header
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: relDateStart
+              phActions: header
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: datetime
         siteID:
           maxlength: 30
@@ -7279,6 +8382,38 @@ schema:
               partID: sourceCode
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: sourceCode
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         standard:
           anyof:
@@ -7326,6 +8461,38 @@ schema:
               partID: standard
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: standard
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         threatTarget:
           maxlength: 50
@@ -7342,6 +8509,39 @@ schema:
               phActions: fK
               phActionsRequired: optional
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: threatTarget
+              phActions: fK
+              phActionsRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         treatmentID:
           maxlength: 30
@@ -7356,6 +8556,38 @@ schema:
               partID: treatmentID
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: treatmentID
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         valTreat:
           anyof:
@@ -7391,6 +8623,38 @@ schema:
               partID: valTreat
               phActions: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: valTreat
+              phActions: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -7525,6 +8789,39 @@ schema:
               polygonRelationships: fK
               polygonRelationshipsRequired: mandatory
             ruleID: missing_values_found
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: polygonIDObject
+              polygonRelationships: fK
+              polygonRelationshipsRequired: mandatory
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
         polygonIDSubject:
@@ -7553,6 +8850,39 @@ schema:
               polygonRelationships: fK
               polygonRelationshipsRequired: mandatory
             ruleID: missing_values_found
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: polygonIDSubject
+              polygonRelationships: fK
+              polygonRelationshipsRequired: mandatory
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           required: true
           type: string
         polygonRelID:
@@ -7587,7 +8917,8 @@ schema:
               polygonRelationshipsRequired: mandatory
             ruleID: missing_values_found
           - meta:
-            - partID: polygonRelID
+            - missingnessSet: genMissingnessSet
+              partID: polygonRelID
               polygonRelationships: pK
               polygonRelationshipsRequired: mandatory
             - partID: NA
@@ -7644,7 +8975,7 @@ schema:
               polygonRelationshipsRequired: recommended
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               mmaSet: relSet
               partID: relationshipID
               polygonRelationships: fK
@@ -7670,7 +9001,7 @@ schema:
               setID: relSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: relationshipID
               polygonRelationships: fK
               polygonRelationshipsRequired: recommended
@@ -8452,6 +9783,39 @@ schema:
               polygons: header
               polygonsRequired: recommended
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: poLic
+              polygons: header
+              polygonsRequired: recommended
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         polygonID:
           emptyTrimmed: false
@@ -8972,7 +10336,7 @@ schema:
               protocolRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               mmaSet: relSet
               partID: relationshipID
               protocolRelationships: fK
@@ -8998,7 +10362,7 @@ schema:
               setID: relSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: relationshipID
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatory
@@ -9988,6 +11352,39 @@ schema:
               protocolSteps: header
               protocolStepsRequired: mandatoryif
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: value
+              protocolSteps: header
+              protocolStepsRequired: mandatoryif
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -11037,6 +12434,38 @@ schema:
               partID: wideMeasure
               qualityReports: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: wideMeasure
+              qualityReports: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         wideName:
           maxlength: 30
@@ -11051,6 +12480,38 @@ schema:
               partID: wideName
               qualityReports: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: wideName
+              qualityReports: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -11183,7 +12644,7 @@ schema:
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               mmaSet: relSet
               partID: relationshipID
               sampleRelationships: fK
@@ -11209,7 +12670,7 @@ schema:
               setID: relSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: relationshipID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
@@ -11697,6 +13158,39 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: greater_than_max_length
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: collDate
+              samples: header
+              samplesRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
         collNum:
           coerce: integer
           emptyTrimmed: false
@@ -11851,14 +13345,14 @@ schema:
           - meta:
             - maxLength: '30'
               partID: collType
-              samples: fk
+              samples: fK
               samplesRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               mmaSet: collectSet
               partID: collType
-              samples: fk
+              samples: fK
             - partID: areaPr
               setID: collectSet
             - partID: cosca
@@ -11903,23 +13397,23 @@ schema:
           - meta:
             - dataType: categorical
               partID: collType
-              samples: fk
+              samples: fK
               samplesRequired: mandatory
             ruleID: invalid_type
           - meta:
             - partID: collType
-              samples: fk
+              samples: fK
               samplesRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
             - partID: collType
-              samples: fk
+              samples: fK
               samplesRequired: mandatory
             ruleID: missing_values_found
           - meta:
             - missingnessSet: genMissingnessSet
               partID: collType
-              samples: fk
+              samples: fK
               samplesRequired: mandatory
             - partID: NA
               setID: genMissingnessSet
@@ -12071,7 +13565,40 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: less_than_min_value
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: epiWeek
+              samples: header
+              samplesRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 1
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         epiWeekStart:
           maxlength: 30
@@ -12082,6 +13609,39 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: greater_than_max_length
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: epiWeekStart
+              samples: header
+              samplesRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
         epiYear:
           coerce: integer
           max: 3000
@@ -12104,7 +13664,40 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: less_than_min_value
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: epiYear
+              samples: header
+              samplesRequired: optional
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
           min: 1900
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: integer
         lastEdited:
           coerce: datetime
@@ -13060,13 +14653,13 @@ schema:
           - meta:
             - maxLength: '30'
               partID: severity
-              samples: Input
+              samples: input
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               mmaSet: sevSet
               partID: severity
-              samples: Input
+              samples: input
             - partID: low
               setID: sevSet
             - partID: mid
@@ -13077,12 +14670,12 @@ schema:
           - meta:
             - dataType: categorical
               partID: severity
-              samples: Input
+              samples: input
             ruleID: invalid_type
           - meta:
             - missingnessSet: genMissingnessSet
               partID: severity
-              samples: Input
+              samples: input
             - partID: NA
               setID: genMissingnessSet
             - partID: 'NULL'
@@ -13186,6 +14779,38 @@ schema:
               partID: wideMeasure
               samples: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: wideMeasure
+              samples: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
         wideName:
           maxlength: 30
@@ -13200,6 +14825,38 @@ schema:
               partID: wideName
               samples: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: wideName
+              samples: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
@@ -14586,6 +16243,38 @@ schema:
               partID: wSphereNotes
               sites: input
             ruleID: invalid_type
+          - meta:
+            - missingnessSet: genMissingnessSet
+              partID: wSphereNotes
+              sites: input
+            - partID: NA
+              setID: genMissingnessSet
+            - partID: 'NULL'
+              setID: genMissingnessSet
+            - partID: dnc
+              setID: genMissingnessSet
+            - partID: miss
+              setID: genMissingnessSet
+            - partID: nan
+              setID: genMissingnessSet
+            - partID: nr
+              setID: genMissingnessSet
+            - partID: restrict
+              setID: genMissingnessSet
+            - partID: undisc
+              setID: genMissingnessSet
+            ruleID: missingness
+          missingness:
+            allowed:
+            - NA
+            - 'NULL'
+            - dnc
+            - miss
+            - nan
+            - nr
+            - restrict
+            - undisc
+            forbidden: []
           type: string
       type: dict
     type: list
