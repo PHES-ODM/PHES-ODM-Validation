@@ -11,14 +11,7 @@ from typing import Callable, Optional, Union
 import odm_validation.part_tables as pt
 from odm_validation.part_tables import SomeValue
 from odm_validation.input_data import DataKind
-from odm_validation.schemas import (
-    MISSINGNESS_ALLOWED_KEY,
-    MISSINGNESS_FORBIDDEN_KEY,
-    MISSINGNESS_KEY,
-    Schema,
-    init_attr_schema,
-    init_table_schema,
-)
+from odm_validation.schemas import Schema, init_attr_schema, init_table_schema
 from odm_validation.stdext import (
     deep_update,
     try_parse_int,
@@ -31,7 +24,6 @@ from odm_validation.rule_primitives import (
     gen_conditional_schema,
     gen_value_schema,
     get_catset_meta,
-    get_missingness_meta,
     get_table_meta,
     is_mandatory,
     is_primary_key,
@@ -51,7 +43,6 @@ RuleId = Enum('RuleId', type=int, names=[
     'greater_than_max_value',
     'missing_mandatory_column',
     'missing_values_found',
-    'missingness',
     'less_than_min_length',
     'less_than_min_value',
     'invalid_category',
@@ -87,9 +78,9 @@ class Rule:
     mapped to an odm validation rule or just the first one. For example, The
     less_than_min_value rule requires three Cerberus rules for its
     implementation: min, type and coerce. However, only the first one should be
-    mapped to an min-value error. A rule that is implemented by multiple
-    independent Cerberus rules, which all should be reported as the same ODM
-    rule, must enable this."""
+    mapped to an min-value error. The missing_values_found rule requires two
+    Cerberus rules for its implementation: emptyTrimmed and forbidden. Both of
+    these should be mapped to a missing_values_found error."""
 
 
 def get_anyof_constraint(anyof_constraint: dict) -> tuple[str, str]:
@@ -229,80 +220,17 @@ def missing_values_found() -> Rule:
             return 'Missing value {value}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
-        # A missingness value is a valid way of stating why a value is absent,
-        # so it doesn't trigger this rule. Only an empty value does. The
-        # `missingness` rule decides which missingness values a column can take
-        # on, and it's the rule that forbids them in identifier columns.
-        return {'emptyTrimmed': False}
+        return {
+            'emptyTrimmed': False,
+            'forbidden': sorted(val_ctx.null_set),
+        }
 
     def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_mandatory)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
-                     is_warning=True)
-
-
-def missingness() -> Rule:
-    rule_id = RuleId.missingness
-    odm_key = pt.MISSINGNESS_SET
-    err = ('Invalid missingness value {value}, the allowed missingness values '
-           'are {allowed_values}')
-
-    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
-        # The actual constraint is generated in `gen_schema`, since it depends
-        # on the table the attribute belongs to.
-        return {MISSINGNESS_KEY: None}
-
-    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
-        schema: dict = {}
-        for table_id0, table_id1, table in table_items(data, ver):
-            table_meta = get_table_meta(table, ver)
-            for attr_id0, attr_id1, attr in attr_items(data, table_id0,
-                                                       table_id1, ver):
-                # a primary key identifies an entry and can therefore never be
-                # missing, even when the attribute has a missingness set in
-                # another table
-                is_pk = is_primary_key(table_id0, attr)
-
-                # the other attributes can only have missingness values when
-                # they have a missingness set
-                set_id = attr.get(odm_key)
-                set_values = (data.missingness_sets.get(set_id, set())
-                              if set_id else set())
-                if not (is_pk or set_values):
-                    continue
-
-                # only an identifier rejects a missingness value. A value
-                # that isn't allowed in another column isn't necessarily a
-                # missingness value there, so it's left to the other rules to
-                # decide whether it's valid.
-                allowed = set() if is_pk else set_values
-                forbidden = data.null_set if is_pk else set()
-                if not (allowed or forbidden):
-                    continue
-
-                # the constraint of an identifier is derived from the
-                # missingness parts of the dictionary, which aren't part of
-                # any set, while the other columns get theirs from their
-                # missingness set
-                meta_set_id = None if is_pk else set_id
-                meta_ids = sorted(forbidden if is_pk else set_values)
-
-                cerb_rules = {MISSINGNESS_KEY: {
-                    MISSINGNESS_ALLOWED_KEY: sorted(allowed),
-                    MISSINGNESS_FORBIDDEN_KEY: sorted(forbidden),
-                }}
-                attr_meta = get_missingness_meta(attr, table_id0, ver, odm_key,
-                                                 meta_set_id, meta_ids)
-                attr_schema = init_attr_schema(attr_id1, rule_id.name,
-                                               cerb_rules, attr_meta)
-                table_schema = init_table_schema(table_id1, table_meta,
-                                                 attr_schema)
-                deep_update(schema, table_schema)
-        return schema
-
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+                     is_warning=True, match_all_keys=True)
 
 
 def less_than_min_length() -> Rule:
@@ -427,5 +355,4 @@ ruleset: tuple = (
     less_than_min_value(),
     missing_mandatory_column(),
     missing_values_found(),
-    missingness(),
 )

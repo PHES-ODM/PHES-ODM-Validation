@@ -8,14 +8,6 @@ Schema = dict  # {'schemaVersion': str, 'schema': CerberusSchema}
 
 COERCE_KEY = 'coerce'
 
-# The Cerberus rule-key of the `missingness` ODM rule. Its constraint is a
-# dict with the `MISSINGNESS_ALLOWED_KEY` and `MISSINGNESS_FORBIDDEN_KEY`
-# keys, which partition the dictionary's missingness values into the ones the
-# column accepts and the ones it doesn't.
-MISSINGNESS_KEY = 'missingness'
-MISSINGNESS_ALLOWED_KEY = 'allowed'
-MISSINGNESS_FORBIDDEN_KEY = 'forbidden'
-
 
 def init_table_schema(table_id: TableId, table_meta: Meta, attr_schema: dict
                       ) -> dict:

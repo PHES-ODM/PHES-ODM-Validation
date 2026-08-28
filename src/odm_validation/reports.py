@@ -119,8 +119,6 @@ def _fmt_dataset_values(rows: list[pt.Row]) -> list[pt.Row]:
 
 def _fmt_allowed_values(values: set[str]) -> str:
     # XXX: The order of set-elements isn't deterministic, so we need to sort.
-    if not values:
-        return 'none'
     return '/'.join(sorted(values))
 
 

@@ -1,7 +1,0 @@
-setID,setType,partID,status,firstReleased,lastUpdated
-genMissingnessSet,missingnessSets,NA,active,1.0.0,2.0.0
-genMissingnessSet,missingnessSets,nan,active,1.0.0,2.0.0
-genMissingnessSet,missingnessSets,nr,active,1.0.0,2.0.0
-nrNAMissingnessSet,missingnessSets,NA,active,1.0.0,2.0.0
-nrNAMissingnessSet,missingnessSets,nr,active,1.0.0,2.0.0
-nrMissingnessSet,missingnessSets,nr,active,1.0.0,2.0.0

@@ -1,5 +1,7 @@
-partID,partType,status,sites,sitesRequired,missingnessSet,version1Location,version1Table,version1Variable,firstReleased,lastUpdated
-NA,missingness,active,NA,NA,NA,NA,NA,NA,2.0.0,2.0.0
-sites,tables,active,NA,NA,NA,tables,Site,NA,1.0.0,2.0.0
-geoLat,attributes,active,header,mandatory,genMissingnessSet,variables,Site,latitude,1.0.0,2.0.0
-geoLong,attributes,active,header,optional,genMissingnessSet,variables,Site,longitude,1.0.0,2.0.0
+partID,partType,status,sites,sitesRequired,version1Location,version1Table,version1Variable,firstReleased,lastUpdated
+NA,missingness,active,NA,NA,NA,NA,NA,2.0.0,2.0.0
+null,missingness,active,NA,NA,NA,NA,NA,1.0.0,2.0.0
+NA_missing,missingness,active,NA,NA,NA,NA,NA,1.0.0,2.0.0
+sites,tables,active,NA,NA,tables,Site,NA,1.0.0,2.0.0
+geoLat,attributes,active,header,mandatory,variables,Site,latitude,1.0.0,2.0.0
+geoLong,attributes,active,header,optional,variables,Site,longitude,1.0.0,2.0.0

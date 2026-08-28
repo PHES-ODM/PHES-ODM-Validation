@@ -97,34 +97,30 @@ def _strip_coerce_rules(cerb_schema: dict) -> dict:
     return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
-def filter_dict_by_keys(keys: list[str], d: dict) -> dict:
+def filter_dict_by_key(key: str, d: dict) -> dict:
     result = {}
-    for key in keys:
-        val = d.get(key, None)
-        if val is not None:
-            result[key] = val
+    val = d.get(key, None)
+    if val is not None:
+        result[key] = val
     return result
 
 
-def filter_column_schemas_by_keys(keys: list[str], column_schemas: dict
-                                  ) -> dict:
+def filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
     result = {}
     for col_name, col_schema in column_schemas.items():
-        d = filter_dict_by_keys(keys, col_schema)
+        d = filter_dict_by_key(key, col_schema)
         if d:
             result[col_name] = d
     return result
 
 
 def gen_coercion_schema(cerb_schema: dict) -> dict:
-    # the missingness rule is needed to exempt missingness values from coercion
-    keys = [schemas.COERCE_KEY, schemas.MISSINGNESS_KEY]
     result = {}
     for table_name, table_schema in cerb_schema.items():
         cs = table_schema['schema']['schema']
         result[table_name] = {
             'schema': {
-                'schema': filter_column_schemas_by_keys(keys, cs),
+                'schema': filter_column_schemas_by_key('coerce', cs),
             }
         }
     return result

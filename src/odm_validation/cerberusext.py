@@ -16,12 +16,7 @@ from odm_validation.input_data import DataKind
 from odm_validation.part_tables import Dataset, Row, SomeValue
 from odm_validation.reports import get_row_num
 from odm_validation.rules import RuleId
-from odm_validation.schemas import (
-    CerberusSchema,
-    MISSINGNESS_ALLOWED_KEY,
-    MISSINGNESS_FORBIDDEN_KEY,
-    MISSINGNESS_KEY,
-)
+from odm_validation.schemas import CerberusSchema
 from odm_validation.stdext import (
     parse_datetime,
     parse_int,
@@ -30,34 +25,6 @@ from odm_validation.stdext import (
 
 
 EMPTY_TRIMMED_RULE = 0x101
-MISSINGNESS_RULE = 0x102
-
-# The 'missingness' rule must be evaluated before the rules that constrain the
-# shape of a value, so that it can exempt missingness values from them.
-PRIORITY_VALIDATIONS = (MISSINGNESS_KEY,) + Validator.priority_validations
-
-# The Cerberus rules that constrain the shape/domain of a value. A missingness
-# value is a placeholder for a value rather than a value of the column's own
-# domain, so these rules don't apply to it. 'emptyTrimmed' is deliberately
-# absent: it implements `missing_values_found`, and a missingness value is
-# never empty, so it can't trigger it anyway.
-VALUE_RULES = ('allowed', 'anyof', 'check_with', 'coerce', 'max', 'maxlength',
-               'min', 'minlength', 'type', 'unique')
-
-
-def get_missingness_kind(constraint: dict, value: Optional[SomeValue]
-                         ) -> Optional[str]:
-    """Returns the key of the missingness set in `constraint` that `value`
-    belongs to, or None when `value` isn't a missingness value."""
-    if not isinstance(value, str):
-        return None
-    val = value.strip()
-    if not val:
-        return None
-    for key in (MISSINGNESS_ALLOWED_KEY, MISSINGNESS_FORBIDDEN_KEY):
-        if val in constraint.get(key, []):
-            return key
-    return None
 
 
 def _convert_value(val: SomeValue, type_class: type) -> SomeValue:
@@ -99,19 +66,9 @@ class ContextualCoercer(Validator):
     # - Retrieving the coerced document from Cerberus' validation step didn't
     #   seem to work either.
 
-    priority_validations = PRIORITY_VALIDATIONS
-
     def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self.allow_unknown = True
-
-    def _validate_missingness(self, constraint: dict, field: str,
-                              value: Optional[SomeValue]) -> None:
-        """{'type': 'dict'}"""
-        # Missingness values are never coerced. Invalid ones are reported by
-        # `OdmValidator`, not here.
-        if get_missingness_kind(constraint, value):
-            self._drop_remaining_rules(*VALUE_RULES)
 
     def _extract_coercion_schema(schema: CerberusSchema) -> dict:
         """Strips `schema` of all rules except 'meta' and 'coerce', and
@@ -123,7 +80,7 @@ class ContextualCoercer(Validator):
                 for key in list(rules.keys()):
                     if key == schemas.COERCE_KEY:
                         rules['check_with'] = rules.pop(key)
-                    elif key not in ('meta', MISSINGNESS_KEY):
+                    elif key != 'meta':
                         del rules[key]
                 if len(rules) == 0:
                     del schema[field]
@@ -237,8 +194,6 @@ class ErrorState:
 class OdmValidator(Validator):
     # This is the main class used for validation.
 
-    priority_validations = PRIORITY_VALIDATIONS
-
     @staticmethod
     def new():  # type: ignore
         """Constructs this class with initialized state."""
@@ -268,17 +223,6 @@ class OdmValidator(Validator):
         is_empty = not value
         if is_empty != expect_empty:
             err = ErrorDefinition(EMPTY_TRIMMED_RULE, 'emptyTrimmed')
-            self._error(field, err)
-
-    def _validate_missingness(self, constraint: dict, field: str,
-                              value: Optional[SomeValue]) -> None:
-        """{'type': 'dict'}"""
-        kind = get_missingness_kind(constraint, value)
-        if not kind:
-            return
-        self._drop_remaining_rules(*VALUE_RULES)
-        if kind == MISSINGNESS_FORBIDDEN_KEY:
-            err = ErrorDefinition(MISSINGNESS_RULE, MISSINGNESS_KEY)
             self._error(field, err)
 
     def _validate_unique(self, constraint: bool, field: str,

@@ -7,8 +7,9 @@
 ASSET_DIR = get_rule_asset_dir('missing_values_found')
 ```
 
-This rule checks if a mandatory column has been left empty. A value is
-considered missing if it is an empty string, or an empty string once trimmed.
+This rule checks if a mandatory column contain any missing values. A value is
+considered missing if it contains an empty string or if it contains one of the
+values considered as missing by the ODM dictionary.
 
 Consider a mandatory column named `geoLat` in a `sites` table. The following
 ODM dataset snippet would fail validation due to the first row having an empty
@@ -28,13 +29,15 @@ also fail validation,
 pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
-A missingness value states why a value is absent, which is a valid way of
-populating a mandatory column. It therefore does **not** trigger this rule.
-The following dataset snippet would pass validation, since `NA` is a
-missingness value that `geoLat` is allowed to take on. Which missingness
-values a column can take on is decided by the
-[missingness](missingness.qmd) rule, which is also the rule that forbids them
-in an identifier (primary key) column.
+Finally, if the ODM dictionary considers values of `NA` to be missing, the
+following would fail validation,
+
+```{python}
+#| echo: false
+pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
+```
+
+The following dataset snippet would pass validation
 
 ```{python}
 #| echo: false
@@ -75,11 +78,22 @@ Example 2 warning report,
 pprint_json_file(asset("error-report-2.json"))
 ```
 
+Example 3 warning report,
+
+```{python}
+#| echo: false
+pprint_json_file(asset("error-report-3.json"))
+```
+
 ## Rule metadata
 
 All the metadata for this rule is contained in the parts sheet in the data
 dictionary. The steps involved are:
 
+1. Get all values that represent missing from the parts sheet
+    1. Filter the parts to only include those whose `partType` column is
+       `missingness`
+    2. The `partID` column has the missing value
 1. [Get the table names from the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 2. [Get all mandatory columns for each table](../specs/odm-how-tos.md#checking-if-a-column-is-mandatory-for-a-table)
 3. Add this rule for each mandatory column
@@ -98,11 +112,14 @@ rule would **not** be added to the `geoLong` column in the same table.
 
 ## Cerberus Schema
 
-Cerberus does not have a rule that fits this one. We need to
-[extend the cerberus validator](https://docs.python-cerberus.org/en/stable/customize.html)
-with a custom rule called `emptyTrimmed` for empty values, which also handles
-trimming. Although the cerberus library has an `empty` rule, that rule allows
-values that are "empty" once trimmed.
+We will need to use two rules from cerberus for this validation rule:
+
+1. A
+   [forbidden](https://docs.python-cerberus.org/en/stable/validation-rules.html#forbidden)
+   rule which includes all the `missingness` values from the dictionary
+2. A custom rule called `emptyTrimmed` for empty values which also handles
+   trimming. Although the cerberus library has an `empty` rule, the rule allows
+   values that are "empty" once trimmed.
 
 The cerberus schema for the ODM dictionary snippet above is shown below,
 
@@ -111,9 +128,12 @@ The cerberus schema for the ODM dictionary snippet above is shown below,
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
-The `meta` field for this rule should have one entry: the row from the parts
-sheet for the mandatory column. The entry should include the `partID` and the
-`<table_name>Required` fields.
+The `meta` field for this rule should have multiple entries,
+
+* An entry per missing value from the dictionary. This entry should include the
+  `partID` and `partType` column
+* and the row from the parts sheet for the mandatory column. The entry should
+  include the `partID` and the `<table_name>Required` fields.
 
 ## ODM Version 1
 

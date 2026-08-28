@@ -380,6 +380,12 @@ schema:
           type: string
         aggregation:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -415,12 +421,28 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         analysisDate:
           coerce: datetime
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -470,6 +492,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -655,6 +687,12 @@ schema:
           type: string
         type:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -690,11 +728,27 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         uWwMeasureID:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -738,15 +792,6 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
-            ruleID: missing_values_found
-          - meta:
-            - measures: pK
-              measuresRequired: mandatory
-              missingnessSet: genMissingnessSet
-              partID: measureRepID
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: uWwMeasureID
             - partID: NA
               partType: missingness
             - partID: nan
@@ -757,20 +802,18 @@ schema:
               partType: missingness
             - partID: undisc
               partType: missingness
-            ruleID: missingness
-          missingness:
-            allowed: []
-            forbidden:
-            - NA
-            - nan
-            - nr
-            - 'null'
-            - undisc
+            ruleID: missing_values_found
           required: true
           type: string
           unique: true
         unit:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -806,6 +849,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -839,6 +892,12 @@ schema:
           type: string
         model:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 100
           meta:
           - meta:
@@ -874,6 +933,16 @@ schema:
               version1Location: variables
               version1Table: Instrument
               version1Variable: model
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -909,6 +978,12 @@ schema:
             - other
             empty: true
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -976,6 +1051,16 @@ schema:
               version1Location: variables
               version1Table: Instrument
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1176,6 +1261,12 @@ schema:
           type: string
         polygonID:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 10
           meta:
           - meta:
@@ -1219,15 +1310,6 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: polygonID
-            ruleID: missing_values_found
-          - meta:
-            - missingnessSet: genMissingnessSet
-              partID: polygonID
-              polygons: pK
-              polygonsRequired: mandatory
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
             - partID: NA
               partType: missingness
             - partID: nan
@@ -1238,15 +1320,7 @@ schema:
               partType: missingness
             - partID: undisc
               partType: missingness
-            ruleID: missingness
-          missingness:
-            allowed: []
-            forbidden:
-            - NA
-            - nan
-            - nr
-            - 'null'
-            - undisc
+            ruleID: missing_values_found
           required: true
           type: string
           unique: true
@@ -1258,6 +1332,12 @@ schema:
             - swrCatSet
             empty: true
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -1310,11 +1390,27 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         wkt:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 63
           meta:
           - meta:
@@ -1350,6 +1446,16 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: wkt
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1422,6 +1528,12 @@ schema:
             - other
             empty: true
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -1504,12 +1616,28 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: collection
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         dateTime:
           coerce: datetime
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -1545,6 +1673,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: dateTime
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -1652,6 +1790,12 @@ schema:
             - water
             empty: true
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -1739,6 +1883,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1890,6 +2044,12 @@ schema:
             - wwtpMuC
             empty: true
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -2037,6 +2197,16 @@ schema:
               version1Location: variables
               version1Table: Site
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2238,6 +2408,12 @@ schema:
           type: string
         aggregation:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -2273,12 +2449,28 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         analysisDate:
           coerce: datetime
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -2328,6 +2520,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -2513,6 +2715,12 @@ schema:
           type: string
         type:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -2548,11 +2756,27 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         uWwMeasureID:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -2596,15 +2820,6 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
-            ruleID: missing_values_found
-          - meta:
-            - measures: pK
-              measuresRequired: mandatory
-              missingnessSet: genMissingnessSet
-              partID: measureRepID
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: uWwMeasureID
             - partID: NA
               partType: missingness
             - partID: nan
@@ -2615,20 +2830,18 @@ schema:
               partType: missingness
             - partID: undisc
               partType: missingness
-            ruleID: missingness
-          missingness:
-            allowed: []
-            forbidden:
-            - NA
-            - nan
-            - nr
-            - 'null'
-            - undisc
+            ruleID: missing_values_found
           required: true
           type: string
           unique: true
         unit:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -2664,6 +2877,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2847,6 +3070,12 @@ schema:
           type: string
         aggregation:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -2882,12 +3111,28 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         analysisDate:
           coerce: datetime
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -2937,6 +3182,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -3122,6 +3377,12 @@ schema:
           type: string
         type:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 12
           meta:
           - meta:
@@ -3157,11 +3418,27 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
         uWwMeasureID:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -3205,15 +3482,6 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
-            ruleID: missing_values_found
-          - meta:
-            - measures: pK
-              measuresRequired: mandatory
-              missingnessSet: genMissingnessSet
-              partID: measureRepID
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: uWwMeasureID
             - partID: NA
               partType: missingness
             - partID: nan
@@ -3224,20 +3492,18 @@ schema:
               partType: missingness
             - partID: undisc
               partType: missingness
-            ruleID: missingness
-          missingness:
-            allowed: []
-            forbidden:
-            - NA
-            - nan
-            - nr
-            - 'null'
-            - undisc
+            ruleID: missing_values_found
           required: true
           type: string
           unique: true
         unit:
           emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
           maxlength: 30
           meta:
           - meta:
@@ -3273,6 +3539,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string

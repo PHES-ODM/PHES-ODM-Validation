@@ -7,6 +7,9 @@ schema:
       schema:
         latitude:
           emptyTrimmed: false
+          forbidden:
+          - NA_missing
+          - 'null'
           meta:
           - ruleID: missing_values_found
             meta:
@@ -16,6 +19,10 @@ schema:
               version1Location: variables
               version1Table: Site
               version1Variable: latitude
+            - partID: NA_missing
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
       meta:
         - partID: sites
           partType: tables

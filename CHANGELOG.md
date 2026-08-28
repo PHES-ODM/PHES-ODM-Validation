@@ -1,32 +1,5 @@
 # Changelog
 
-## [Unreleased]
-
-### General
-
-- Added validation rule `missingness`, which identifies the missingness values
-  a column can take on, as listed by its `missingnessSet`. A missingness value
-  outside that set isn't a missingness value in that column, so it is left to
-  the other rules to validate. Primary key columns can't contain any
-  missingness value, which is the only case this rule reports, and is enforced
-  even when they have no `missingnessSet`.
-- Changed the rules that constrain the shape of a value (`invalid_type`,
-  `invalid_category`, the min/max rules and `duplicate_entries_found`) to
-  exempt a column's allowed missingness values. Type coercion is skipped for
-  them as well.
-- Fixed `missing_values_found` reporting a missingness value in a mandatory
-  column as a missing value. A missingness value states why a value is absent
-  and is a valid way of populating a mandatory column. The rule now only
-  reports mandatory columns that are empty. Missingness values in identifier
-  (primary key) columns are reported by the new `missingness` rule instead.
-
-### Validation schemas
-
-- Added `missingness` rule to the v2 schemas, and to the primary keys of the
-  v1 schemas. Its `forbidden` constraint is only non-empty for primary keys
-- Removed the `forbidden` constraint from the `missing_values_found` rule,
-  together with its `missingness` metadata entries
-
 ## [0.6.0] - 2024-12-03
 
 ### General

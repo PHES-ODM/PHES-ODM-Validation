@@ -4,12 +4,12 @@
             "warningType": "missing_values_found",
             "tableName": "sites",
             "columnName": "geoLat",
+            "invalidValue": "NA",
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
-                "geoLat": ""
+                "geoLat": "NA"
             },
-            "invalidValue": "",
             "validationRuleFields": [
                 {
                     "partID": "geoLat",
@@ -29,7 +29,7 @@
                     "partType": "missingness"
                 }
             ],
-            "message": "missing_values_found rule triggered in table sites, column geoLat, row(s) 1: Empty string found"
+            "message": "missing_values_found rule triggered in table sites, column geoLat, row(s) 1: Missing value \"NA\""
         }
     ],
     "errors": []

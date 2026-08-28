@@ -8,7 +8,7 @@ import odm_validation.odm as odm
 import odm_validation.part_tables as pt
 import odm_validation.schemas as schemas
 from odm_validation.part_tables import (
-    Meta, MetaEntry, OdmData, Part, PartId, SetId, SomeValue)
+    Meta, MetaEntry, OdmData, Part, PartId, SomeValue)
 from odm_validation.schemas import init_attr_schema, init_table_schema
 from odm_validation.stdext import (
     deep_update,
@@ -54,6 +54,12 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
     result += [{k: attr[k] for k in keys if k in attr}]
 
     if cerb_rules:
+        # pseudo sets
+        forbidden_ids = cerb_rules.get('forbidden')
+        if forbidden_ids:
+            for part_id in forbidden_ids:
+                result.append({'partID': part_id, 'partType': pt.MISSINGNESS})
+
         # sets
         if version.major >= 2:
             allowed_ids = cerb_rules.get('allowed')
@@ -88,31 +94,9 @@ def get_catset_meta(table_id: PartId, catset: Part, categories: list[Part],
     meta.append({k: catset[k] for k in catset_keys})
     for cat in categories:
         meta.append({k: cat[k] for k in cat_keys})
-        if version.major >= 2:
+        if version.major == 2:
             meta[-1][pt.SET_ID] = catset[pt.CATSET_ID]
     return meta
-
-
-def get_missingness_meta(attr: Part, table_id: PartId, version: Version,
-                         odm_key: str, set_id: Optional[SetId],
-                         missingness_ids: list[PartId]) -> Meta:
-    """Returns the metadata of the missingness rule for `attr`, in table
-    `table_id`.
-
-    :odm_key: The ODM attribute holding the missingness-set id.
-    :set_id: The id of the missingness set, or None when the column doesn't
-        have one.
-    :missingness_ids: The part ids of the missingness values to document.
-        They are the values of `set_id` when it is set, otherwise they are the
-        missingness parts of the dictionary.
-    """
-    result = _get_attr_meta(attr, table_id, version, odm_key)
-    for part_id in missingness_ids:
-        if set_id:
-            result.append({pt.PART_ID: part_id, pt.SET_ID: set_id})
-        else:
-            result.append({pt.PART_ID: part_id, pt.PART_TYPE: pt.MISSINGNESS})
-    return result
 
 
 def get_part_ids(parts: list[Part]) -> list[PartId]:

@@ -77,7 +77,6 @@ class OdmData:
 
     bool_set: set[str]
     null_set: set[str]
-    missingness_sets: dict[SetId, set[PartId]]  # missingness values, by set id
     catset_data: dict[TableAttrId, CatsetData]
     table_data: dict[PartId, TableData]  # table data, by table id
     mappings: dict[PartId, list[PartId]]  # v1 mapping, by part id
@@ -98,11 +97,9 @@ CLASS = 'class'
 DATA_TYPE = 'dataType'
 FIRST_RELEASED = 'firstReleased'
 LAST_UPDATED = 'lastUpdated'
-MISSINGNESS_SET = 'missingnessSet'
 PART_ID = 'partID'
 PART_TYPE = 'partType'
 SET_ID = 'setID'
-SET_TYPE = 'setType'
 STATUS = 'status'
 
 PART_ID_ORIGINAL = 'partID_original'
@@ -127,7 +124,6 @@ DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
 MEASURE_ID = 'measure'
 MISSINGNESS = 'missingness'
-MISSINGNESS_SETS = 'missingnessSets'
 PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
 TABLES = 'tables'
 VARIABLES = 'variables'
@@ -273,19 +269,6 @@ def has_catset(p: Part) -> bool:
 def is_null_set(p: Part) -> bool:
     # the ODM doesn't have these values as a catset, but it's a set
     return p.get(PART_TYPE) == MISSINGNESS
-
-
-def is_missingness_set(s: Row) -> bool:
-    "Returns True if the sets-table row `s` belongs to a missingness set."
-    return s.get(SET_TYPE) == MISSINGNESS_SETS
-
-
-def gen_missingness_sets(sets: Dataset) -> dict[SetId, set[PartId]]:
-    "Maps each missingness-set id to the missingness values it contains."
-    result: dict[SetId, set[PartId]] = {}
-    for s in filter(is_missingness_set, sets):
-        result.setdefault(s[SET_ID], set()).add(s[PART_ID])
-    return result
 
 
 def is_table_v1(p: Part) -> bool:
@@ -450,10 +433,7 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     all_parts = gen_partmap(parts)
     fix_parts(all_parts, version)
     parts = filter_compatible(parts, version)
-    # Note: filtering out non-backportable rows has been disabled: backporting
-    # is not required to generate the validation schema, and backporting is
-    # only supported back to ODM v1 (not to v2 or any other version)
-    # parts = filter_backportable(parts, version)
+    parts = filter_backportable(parts, version)
 
     # process sets
     fix_sets(sets, version)
@@ -463,7 +443,6 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     tables = gen_partmap(list(filter(table_pred, parts)))
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
-    missingness_sets = gen_missingness_sets(sets)
 
     # table attributes
     table_data = {}
@@ -538,7 +517,6 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     return OdmData(
         bool_set=set(BOOL_PART_IDS),
         null_set=null_set,
-        missingness_sets=missingness_sets,
         table_data=table_data,
         catset_data=catset_data,
         mappings=mappings,
