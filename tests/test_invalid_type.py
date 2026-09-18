@@ -49,7 +49,7 @@ class Assets():
             # that boundary need the same upper-casing applied here to stay
             # in sync with what generation actually produces.
             meta_path = ('schema', 'measures', 'schema', 'schema',
-                        'reportable', 'meta', 0, 'meta')
+                         'reportable', 'meta', 0, 'meta')
             for vstr, sch in self.schemas.items():
                 if parse_version(vstr).minor <= 2:
                     continue
