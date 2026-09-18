@@ -40,6 +40,26 @@ class Assets():
         for vstr in map(str, odm.LEGACY_VERSIONS):
             self.schemas[vstr] = gen_testschema(v1_schema, vstr)
 
+        if kind == 'bool':
+            # `{kind}-schema-v2.yml` bakes in lower-case 'false'/'true'
+            # partIDs, matching rule_primitives.get_attr_meta's own
+            # `version.minor <= 2` quirk (booleanSet's part-ids are
+            # lower-case in ODM v2.2 and below). gen_v2_testschemas clones
+            # that one fixture for every current version, so versions past
+            # that boundary need the same upper-casing applied here to stay
+            # in sync with what generation actually produces.
+            meta_path = ('schema', 'measures', 'schema', 'schema',
+                        'reportable', 'meta', 0, 'meta')
+            for vstr, sch in self.schemas.items():
+                if parse_version(vstr).minor <= 2:
+                    continue
+                node = sch
+                for key in meta_path:
+                    node = node[key]
+                for entry in node:
+                    if entry.get('partID') in ('false', 'true'):
+                        entry['partID'] = entry['partID'].upper()
+
         # datasets
         # TODO: glob all files instead of hardcoding them like this?
         self.data_pass = [

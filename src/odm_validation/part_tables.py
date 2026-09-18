@@ -134,6 +134,17 @@ V1_LOCATION = 'version1Location'
 V1_TABLE = 'version1Table'
 V1_CATEGORY = 'version1Category'
 
+# The oldest "current" (non-legacy) major version, i.e. the boundary below
+# which parts must have a version1* mapping to be backportable. This must
+# stay fixed at 2, not track `odm.VERSION` (the newest dictionary major
+# currently present) -- odm.CURRENT_VERSIONS already only ever contains
+# major >= 2 (see odm.py's `_get_odm_versions`), so backport-mapping
+# enforcement is only ever meaningful for major-1 (LEGACY_VERSIONS) schema
+# generation. Using `odm.VERSION` here instead would make this enforcement
+# incorrectly start applying to existing major-2 schemas the moment a
+# major-3 dictionary version is added, since `2 < 3` newly becomes true.
+FIRST_CURRENT_MAJOR = Version(major=2)
+
 # mapping
 V1_KIND_MAP = {
     TABLES: MapKind.TABLE,
@@ -216,7 +227,7 @@ def _get_mappings(part: dict, version: Version) -> list[PartId]:
     # - parts may be missing version1 fields
     # - partType 'missingness' does not have version1 fields
     # - catSet 'booleanSet' is not required to have a version1Location
-    if not should_have_mapping(part, version, odm.VERSION):
+    if not should_have_mapping(part, version, FIRST_CURRENT_MAJOR):
         return []
     ids = []
     loc = part.get(V1_LOCATION)
@@ -337,7 +348,7 @@ def filter_compatible(rows: Dataset, version: Version) -> Dataset:
 def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     "Retuns the subset of `parts` that has a mapping to v1."
     result = []
-    latest = odm.VERSION
+    latest = FIRST_CURRENT_MAJOR
     for row in parts:
         part_id = get_partID(row)
         first = get_initial_version(row)
@@ -397,7 +408,7 @@ def fix_parts(all_parts: PartMap, version: Version) -> None:
         # NOTE: v1 schemas are only generated from ODM v2.0
         for part_id in BOOL_PART_IDS:
             part = all_parts.get(part_id)
-            if part and should_have_mapping(part, version, odm.VERSION):
+            if part and should_have_mapping(part, version, FIRST_CURRENT_MAJOR):
                 if V1_CATEGORY not in part:
                     part[V1_CATEGORY] = part_id.capitalize()
                     assert has_mapping(part, version)
