@@ -94,7 +94,10 @@ def get_catset_meta(table_id: PartId, catset: Part, categories: list[Part],
     meta.append({k: catset[k] for k in catset_keys})
     for cat in categories:
         meta.append({k: cat[k] for k in cat_keys})
-        if version.major == 2:
+        # `setID` is meaningful from v2 onward (v1 doesn't have `CATSET_ID`);
+        # this must be `>= 2`, not `== 2`, so it keeps applying as newer
+        # major versions (e.g. v3) are added.
+        if version.major >= 2:
             meta[-1][pt.SET_ID] = catset[pt.CATSET_ID]
     return meta
 
